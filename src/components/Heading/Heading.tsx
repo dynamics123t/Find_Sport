@@ -43,7 +43,7 @@ export default function Heading({ title, pageNames, children }: IProps) {
               })
             : null}
         </div>
-        <h4 className="text-green-light font-semibold leading-8 text-[28px] mt-2   ">
+        <h4 className="text-green-light font-semibold leading-8 text-[28px] mt-2">
           {title}
         </h4>
       </div>

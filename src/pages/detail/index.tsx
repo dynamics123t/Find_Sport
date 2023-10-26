@@ -1,6 +1,6 @@
 import Footer from "@/components/Footer/footer";
 import Header from "@/components/Headder/header";
-import Heading from "@/components/Heading";
+import Heading from "@/components/Heading/Heading";
 import Image from "next/image";
 import React from "react";
 

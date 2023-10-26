@@ -1,4 +1,4 @@
-import CardRead from "@/components/CardRead";
+import CardRead from "@/components/CardRead/CardRead";
 import Footer from "@/components/Footer/footer";
 import Header from "@/components/Headder/header";
 import React from "react";
@@ -16,20 +16,26 @@ const Index = () => {
             Tìm kiếm sân chơi thể thao và nhà thi đấu khắp Đà Nẵng
           </p>
           <select
-            id="countries"
+            defaultValue={"DEFAULT"}
+            id="sports"
             className="bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
-            <option selected>Chọn môn thể thao</option>
+            <option value="DEFAULT" disabled>
+              Chọn môn thể thao
+            </option>
             <option value="BD">Bóng Đá</option>
             <option value="CL">Cầu Lông</option>
             <option value="TN">Tennis</option>
             <option value="BR">Bóng rổ</option>
           </select>
           <select
-            id="countries"
+            defaultValue={"DEFAULT"}
+            id="district"
             className="bg-gray-50 border mb-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
-            <option selected>Chọn khu vực</option>
+            <option value="DEFAULT" disabled>
+              Chọn khu vực
+            </option>
             <option value="CamLe">Quận Cẩm Lệ</option>
             <option value="HaiChau">Quận Hải Châu</option>
             <option value="LienChieu">Quận Liên Chiểu</option>

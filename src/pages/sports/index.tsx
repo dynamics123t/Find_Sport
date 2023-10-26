@@ -1,10 +1,10 @@
 import Footer from "@/components/Footer/footer";
 import Header from "@/components/Headder/header";
-import Card from "@/components/Card";
-import Search from "@/components/Search";
+import Card from "@/components/Card/Card";
+import Search from "@/components/Search/Search";
 import React from "react";
-import Pagination from "@/components/Pagination";
-import Heading from "@/components/Heading";
+import Pagination from "@/components/Pagination/Pagination";
+import Heading from "@/components/Heading/Heading";
 const index = () => {
   return (
     <div className="w-full h-full">

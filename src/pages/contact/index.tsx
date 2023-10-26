@@ -1,8 +1,8 @@
 import Footer from "@/components/Footer/footer";
 import Header from "@/components/Headder/header";
-import Contact from "@/components/Contact/index";
-import Heading from "@/components/Heading";
+import Contact from "@/components/Contact/Contact";
 import React from "react";
+import Heading from "@/components/Heading/Heading";
 
 export const index = () => {
   return (

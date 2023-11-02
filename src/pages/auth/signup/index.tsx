@@ -1,20 +1,33 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { toast } from "react-hot-toast";
 import { useFormik } from "formik";
 import { SCHEMA_SIGNUP } from "@/utils/constants/schema";
+import { postRequest } from "@/services/base/postRequest";
+import { useRouter } from "next/router";
 const index = () => {
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      username: "",
-      number: "",
       email: "",
-      password: "",
-      repassword: "",
+      username: "",
     },
     validationSchema: SCHEMA_SIGNUP,
-    onSubmit: async (values) => {
-      console.log("dang ky thanh cong");
+    onSubmit: async ({ email, username }) => {
+      try {
+        await postRequest("/auth/register", {
+          email: email,
+          username: username,
+        });
+        toast.success("Xác thực email");
+        router.push("/auth/verifycode");
+      } catch (error: any) {
+        if (error.response?.data?.message === "EXISTED_EMAIL") {
+          toast.error("existEmail");
+        } else {
+          toast.error("serverError");
+        }
+      }
     },
   });
 
@@ -43,25 +56,6 @@ const index = () => {
             </p>
           </div>
           <div className="w-full flex flex-col">
-            <div className="flex justify-between">
-              <input
-                type="text"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-                name="username"
-                placeholder="Tên đăng nhập"
-                className="w-[47%] text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none "
-              />
-              <input
-                type="number"
-                value={formik.values.number}
-                onChange={formik.handleChange}
-                name="number"
-                placeholder="Số điện thoại"
-                className="w-[47%] text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
-              />
-            </div>
-
             <input
               type="email"
               value={formik.values.email}
@@ -70,27 +64,21 @@ const index = () => {
               placeholder="Email"
               className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
             />
-
             <input
-              type="password"
-              value={formik.values.password}
+              type="text"
+              value={formik.values.username}
               onChange={formik.handleChange}
-              name="password"
-              placeholder="Mật khẩu"
-              className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
-            />
-            <input
-              type="password"
-              value={formik.values.repassword}
-              onChange={formik.handleChange}
-              name="repassword"
-              placeholder="Nhắc lại Mật khẩu"
-              className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
+              name="username"
+              placeholder="Tên đăng nhập"
+              className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none "
             />
           </div>
 
           <div className="w-full flex flex-col my-4">
-            <button className="w-full text-white my-2 font-semibold bg-[#060606] rounded-md p-4 text-center flex items-center justify-center">
+            <button
+              type="submit"
+              className="w-full text-white my-2 font-semibold bg-[#060606] rounded-md p-4 text-center flex items-center justify-center"
+            >
               Đăng ký
             </button>
             <Link

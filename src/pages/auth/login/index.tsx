@@ -1,18 +1,40 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { toast } from "react-hot-toast";
 import { useFormik } from "formik";
 import { SCHEMA_LOGIN } from "@/utils/constants/schema";
-
+import { postRequest } from "@/services/base/postRequest";
+import { setCookie } from "@/utils/clientCookie";
+import { useRouter } from "next/router";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/settings/constants";
 const index = () => {
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      username: "",
+      email: "",
       password: "",
     },
     validationSchema: SCHEMA_LOGIN,
-    onSubmit: async (values) => {
-      console.log("login thanh cong");
+
+    onSubmit: async ({ email, password }) => {
+      try {
+        const data: any = await postRequest("/auth/login", {
+          email,
+          password,
+        });
+        toast.success("Đăng nhập thành công");
+        router.push("/sports");
+        setCookie(REFRESH_TOKEN, data.data.refresh_token, {
+          expires: 7,
+        });
+        setCookie(ACCESS_TOKEN, data.data.access_token);
+      } catch (error: any) {
+        if (error.response?.data?.statusCode === 404) {
+          toast.error("This is an error!");
+        } else {
+          toast.error("serverError");
+        }
+      }
     },
   });
   // console.log(formik.errors);
@@ -46,9 +68,9 @@ const index = () => {
           <div className="w-full flex flex-col">
             <input
               type="text"
-              value={formik.values.username}
+              value={formik.values.email}
               onChange={formik.handleChange}
-              name="username"
+              name="email"
               placeholder="Tên đăng nhập"
               className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
             />
@@ -78,6 +100,7 @@ const index = () => {
             >
               Đăng nhập
             </button>
+
             <Link
               href="/auth/signup"
               className="w-full text-[#060606] my-2 font-semibold bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center"

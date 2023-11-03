@@ -1,71 +1,101 @@
-import React from "react";
+"use client";
+import { useMemo } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
-const pagimation = () => {
+import { updateSearchParams } from "@/utils/helpers/updateQueryParams";
+import PaginationBlock from "./PaginationBlock";
+
+interface IProps {
+  page: number;
+  total_record: number;
+  record_per_page: number;
+  handleChange: (value: number) => void;
+}
+
+export default function PaginationCustom({
+  handleChange,
+  page,
+  total_record,
+  record_per_page,
+}: IProps) {
+  const router = useRouter();
+
+  const data = {
+    maxNum: 2,
+    prevDots: false,
+    nextDots: false,
+  };
+
+  const list = useMemo(() => {
+    const max = Math.ceil(total_record / record_per_page);
+    const array = [];
+    for (let i = 1; i <= max; i++) {
+      array.push(i);
+    }
+
+    return array;
+  }, [total_record, record_per_page]);
+
+  const handleClick = (index: number) => {
+    handleChange(index);
+    router.replace(updateSearchParams("page", "" + index));
+  };
+
   return (
-    <div>
-      <nav aria-label="Page navigation example">
-        <ul className="inline-flex -space-x-px text-sm">
-          <li>
-            <a
-              href="#"
-              className="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 "
-            >
-              Previous
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
-            >
-              1
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
-            >
-              2
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              aria-current="page"
-              className="flex items-center justify-center px-3 h-8 text-gray-500 border border-gray-300 bg-[#56E07B] hover:bg-[#8ff3aa] hover:text-blue-700e"
-            >
-              3
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
-            >
-              4
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
-            >
-              5
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
-            >
-              Next
-            </a>
-          </li>
-        </ul>
-      </nav>
+    <div className="flex gap-x-[1px] flex-wrap">
+      <PaginationBlock
+        content={
+          <Image src="/images/chevron-left.png" alt="" width={14} height={14} />
+        }
+        onClick={() => handleClick(page - 1)}
+        disable={page === 1}
+      />
+      {list.map((index) => {
+        if (index === 1 || index === list.length)
+          return (
+            <PaginationBlock
+              key={index}
+              content={index}
+              onClick={() => handleClick(index)}
+              active={page === index}
+            />
+          );
+        if (index < page - data.maxNum) {
+          if (data.prevDots) return null;
+          data.prevDots = true;
+          return (
+            <PaginationBlock key={"prev"} content={"..."} onClick={() => {}} />
+          );
+        }
+        if (index > page + data.maxNum) {
+          if (data.nextDots) return null;
+          data.nextDots = true;
+          return (
+            <PaginationBlock key={"next"} content={"..."} onClick={() => {}} />
+          );
+        }
+        return (
+          <PaginationBlock
+            key={index}
+            content={index}
+            onClick={() => handleClick(index)}
+            active={page === index}
+          />
+        );
+      })}
+      <PaginationBlock
+        content={
+          <Image
+            src="/images/chevron-right.png"
+            alt=""
+            width={14}
+            height={14}
+          />
+        }
+        onClick={() => handleClick(page + 1)}
+        disable={page === list.length}
+      />
     </div>
   );
-};
-
-export default pagimation;
+}

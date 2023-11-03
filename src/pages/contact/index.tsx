@@ -3,11 +3,12 @@ import Header from "@/components/Headder/header";
 import Contact from "@/components/Contact/Contact";
 import React from "react";
 import Heading from "@/components/Heading/Heading";
+import HeaderAuth from "@/components/Headder/headerAuth";
 
 export const index = () => {
   return (
     <div className="w-full h-full">
-      <Header></Header>
+      <HeaderAuth></HeaderAuth>
       <div>
         <div className="flex flex-col pt-8 pl-8">
           <Heading

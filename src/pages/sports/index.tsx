@@ -2,9 +2,15 @@ import Footer from "@/components/Footer/footer";
 import Header from "@/components/Headder/header";
 import Card from "@/components/Card/Card";
 import Search from "@/components/Search/Search";
-import React from "react";
-import Pagination from "@/components/Pagination/Pagination";
+import React, { useState } from "react";
 import Heading from "@/components/Heading/Heading";
+import PaginationCustom from "@/components/Pagination/Pagination";
+
+interface AcceptUsersProps {
+  searchParams: {
+    page: number;
+  };
+}
 const index = () => {
   return (
     <div className="w-full h-full">
@@ -25,7 +31,12 @@ const index = () => {
         <Card></Card>
         <Card></Card>
         <div className="flex justify-center items-center">
-          <Pagination></Pagination>
+          {/* <PaginationCustom
+            handleChange={() => {}}
+            page={page}
+            total_record={total}
+            record_per_page={10}
+          /> */}
         </div>
       </div>
       <div className="bottom-0">

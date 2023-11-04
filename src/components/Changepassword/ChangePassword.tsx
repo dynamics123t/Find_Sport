@@ -5,7 +5,7 @@ const ChangePassword = () => {
     <div>
       {" "}
       <div className="w-full h-full">
-        <div className="max-w-lg h-full mx-auto my-10 bg-white p-8 rounded-xl mt-28 shadow-[1px_1px_8px_rgba(0,_0,_0,_0.2)] shadow-slate-300 ">
+        <div className="max-w-lg h-full mx-auto my-10 bg-white p-8 rounded-xl shadow-[1px_1px_8px_rgba(0,_0,_0,_0.2)] shadow-slate-300 ">
           <h1 className="text-4xl font-medium">Đổi mật khẩu</h1>
           <p className="text-slate-500">Điền vào biểu mẫu để đổi mật khẩu</p>
 

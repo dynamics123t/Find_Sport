@@ -2,6 +2,7 @@ import useClickOutSide from "@/utils/hook/useClickOutSide";
 import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 const DropDown = () => {
   const [isDropDown, setDropDown] = useState(false);
   const route = useRouter();
@@ -53,17 +54,26 @@ const DropDown = () => {
             aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton"
           >
             <li>
-              <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
+              <Link
+                href="/user/profile"
+                className="block px-4 py-2 hover:bg-gray-100 "
+              >
                 Thông tin cá nhân
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
+              <a
+                href="/user/history"
+                className="block px-4 py-2 hover:bg-gray-100 "
+              >
                 Lịch sử đặt sân
               </a>
             </li>
             <li>
-              <a href="#" className="block px-4 py-2 hover:bg-gray-100 ">
+              <a
+                href="/user/changepassword"
+                className="block px-4 py-2 hover:bg-gray-100 "
+              >
                 Đổi mật khẩu
               </a>
             </li>

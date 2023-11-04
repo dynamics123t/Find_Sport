@@ -40,7 +40,7 @@ export default function Heading({ title, pageNames, subLink }: IProps) {
                       {item}
                     </Link>
                     <Image
-                      src="/images/chevron-right.png"
+                      src="/images/right.png"
                       alt="arrow"
                       width={20}
                       height={20}

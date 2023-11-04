@@ -24,7 +24,7 @@ export const SCHEMA_VERIFY_CODE = yup.object({
       "Định dạng không hợp lệ"
     ),
   verify_code: yup.string().required(),
-  password: yup.string().required(),
+  new_password: yup.string().required(),
   password_confirm: yup.string().required(),
 });
 

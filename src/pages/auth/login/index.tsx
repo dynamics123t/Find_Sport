@@ -23,7 +23,7 @@ const index = () => {
           password,
         });
         toast.success("Đăng nhập thành công");
-        router.push("/sports");
+        router.push("/");
         setCookie(REFRESH_TOKEN, data.data.refresh_token, {
           expires: 7,
         });

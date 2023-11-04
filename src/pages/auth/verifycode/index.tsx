@@ -11,18 +11,20 @@ const index = () => {
     initialValues: {
       email: "",
       verify_code: "",
-      password: "",
+      new_password: "",
       password_confirm: "",
     },
     validationSchema: SCHEMA_VERIFY_CODE,
-    onSubmit: async ({ email, verify_code, password, password_confirm }) => {
+    onSubmit: async ({
+      email,
+      verify_code,
+      new_password,
+      password_confirm,
+    }) => {
       try {
-        await putRequest("/auth/verify_code", {
-          email: email,
-          verify_code: verify_code,
-          new_password: password,
-          password_confirm: password_confirm,
-        });
+        await putRequest(
+          `/auth/verify_code?email=${email}&verify_code=${verify_code}&new_password=${new_password}&password_confirm=${password_confirm}`
+        );
         toast.success("Đăng kí thành công");
         router.push("/auth/login");
       } catch (error: any) {
@@ -80,9 +82,9 @@ const index = () => {
             />
             <input
               type="password"
-              value={formik.values.password}
+              value={formik.values.new_password}
               onChange={formik.handleChange}
-              name="password"
+              name="new_password"
               placeholder="Mật khẩu"
               className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none focus:outline-none"
             />

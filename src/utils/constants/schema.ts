@@ -1,5 +1,5 @@
 import * as yup from "yup";
-
+const fieldRequired = "Không được bỏ trống!";
 export const SCHEMA_LOGIN = yup.object({
   email: yup.string().required(),
   password: yup.string().required(),
@@ -30,4 +30,19 @@ export const SCHEMA_VERIFY_CODE = yup.object({
 
 export const FORGOT_PASSWORD_SCHEMA = yup.object({
   email: yup.string().min(6).max(30).email("isEmail").required("isRequired"),
+});
+
+export const SCHEMA_CHANGE_PASSWORD = yup.object({
+  old_password: yup
+    .string()
+    .required(fieldRequired)
+    .min(6, "Mật khẩu phải chứa 6 ký tự"),
+  new_password: yup
+    .string()
+    .required(fieldRequired)
+    .min(6, "Mật khẩu phải chứa 6 ký tự"),
+  new_password_confirm: yup
+    .string()
+    .required(fieldRequired)
+    .oneOf([yup.ref("new_password")], "Mật khẩu nhập lại không chính xác"),
 });

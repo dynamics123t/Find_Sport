@@ -8,7 +8,6 @@ import HeaderAuth from "@/components/Headder/headerAuth";
 export const index = () => {
   return (
     <div className="w-full h-full">
-      <HeaderAuth></HeaderAuth>
       <div>
         <div className="flex flex-col pt-8 pl-8">
           <Heading
@@ -66,9 +65,6 @@ export const index = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="bottom-0">
-        <Footer></Footer>
       </div>
     </div>
   );

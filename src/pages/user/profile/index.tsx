@@ -6,11 +6,7 @@ import React from "react";
 const profileUser = () => {
   return (
     <div>
-      <HeaderAuth></HeaderAuth>
       <ProfileUser />
-      <div className="mt-10">
-        <Footer></Footer>
-      </div>
     </div>
   );
 };

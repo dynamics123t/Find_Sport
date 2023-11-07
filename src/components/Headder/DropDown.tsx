@@ -3,7 +3,13 @@ import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { removeCookies } from "@/utils/clientCookie";
+import { clearUser } from "@/redux/user/userSlice";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/settings/constants";
+import { useAppDispatch } from "@/redux/hook";
 const DropDown = () => {
+  const dispatch = useAppDispatch();
   const [isDropDown, setDropDown] = useState(false);
   const route = useRouter();
   const dropDownRef = useRef<HTMLDivElement>(null);
@@ -14,7 +20,11 @@ const DropDown = () => {
     dropDownRef,
     [isDropDown]
   );
-  console.log(isDropDown);
+  const handleLogout = () => {
+    removeCookies([ACCESS_TOKEN, REFRESH_TOKEN]);
+    dispatch(clearUser());
+    route.replace("/");
+  };
   return (
     <div className="relative" ref={dropDownRef}>
       <button
@@ -27,7 +37,7 @@ const DropDown = () => {
         <span className="sr-only">Open user menu</span>
         <img
           className="w-8 h-8 mr-2 rounded-full"
-          src="/images/avatar.jpg"
+          src="/images/avt1.jpg"
           alt="user photo"
         />
         Nguyễn Duy Tân
@@ -78,7 +88,7 @@ const DropDown = () => {
               </a>
             </li>
           </ul>
-          <div className="py-2">
+          <div onClick={handleLogout} className="py-2">
             <a
               href="#"
               className="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100 "

@@ -1,26 +1,25 @@
 import Footer from "@/components/Footer/footer";
 import Header from "@/components/Headder/header";
 import Card from "@/components/Card/Card";
-import Search from "@/components/Search/Search";
 import React, { useState } from "react";
 import Heading from "@/components/Heading/Heading";
 import PaginationCustom from "@/components/Pagination/Pagination";
 import CheckboxField from "@/components/CheckboxField/CheckboxField";
-
+import currentUser from "@/redux/user/userSlice";
 interface AcceptUsersProps {
   searchParams: {
     page: number;
   };
 }
 const index = () => {
+  const [isHeader, setHeader] = useState(false);
+  if (currentUser) {
+  } else {
+  }
   return (
     <div className="w-full h-full">
-      <Header></Header>
       <div className="flex flex-col pt-8 pl-8">
         <Heading title="Bóng Đá" pageNames={["Trang chủ", "Sân bóng đá"]} />
-      </div>
-      <div className="w-[400px] pl-8 pt-6">
-        <Search></Search>
       </div>
       <div className="flex justify-center">
         <div className="w-1/5 mt-10">
@@ -67,10 +66,6 @@ const index = () => {
           /> */}
           </div>
         </div>
-      </div>
-
-      <div className="bottom-0">
-        <Footer></Footer>
       </div>
     </div>
   );

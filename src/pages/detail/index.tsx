@@ -7,7 +7,6 @@ import React from "react";
 const index = () => {
   return (
     <div className="w-full h-full">
-      <Header></Header>
       <div className="w-full flex justify-center items-center">
         <div className="flex flex-col p-8">
           <div className="pb-8">
@@ -200,10 +199,6 @@ const index = () => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="mt-10">
-        <Footer></Footer>
       </div>
     </div>
   );

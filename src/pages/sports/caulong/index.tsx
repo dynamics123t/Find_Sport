@@ -1,7 +1,6 @@
 import Footer from "@/components/Footer/footer";
 import Header from "@/components/Headder/header";
 import Card from "@/components/Card/Card";
-import Search from "@/components/Search/Search";
 import React, { useState } from "react";
 import Heading from "@/components/Heading/Heading";
 import PaginationCustom from "@/components/Pagination/Pagination";
@@ -15,13 +14,10 @@ interface AcceptUsersProps {
 const index = () => {
   return (
     <div className="w-full h-full">
-      <Header></Header>
       <div className="flex flex-col pt-8 pl-8">
         <Heading title="Cầu Lông" pageNames={["Trang chủ", "Sân cầu lông"]} />
       </div>
-      <div className="w-[1000px] pl-8 pt-6">
-        <Search></Search>
-      </div>
+
       <div className="flex justify-center">
         <div className="w-1/5 mt-10">
           <h3 className="text-[25px] mb-4 font-semibold text-gray-900">
@@ -66,10 +62,6 @@ const index = () => {
           /> */}
           </div>
         </div>
-      </div>
-
-      <div className="bottom-0">
-        <Footer></Footer>
       </div>
     </div>
   );

@@ -6,11 +6,7 @@ import React from "react";
 const Changepassword = () => {
   return (
     <div>
-      <HeaderAuth></HeaderAuth>
       <ChangePassword />
-      <div className="mt-10">
-        <Footer></Footer>
-      </div>
     </div>
   );
 };

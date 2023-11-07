@@ -76,6 +76,24 @@ const Dashboard = () => {
                 </button>
               </a>
             </li>
+            <li>
+              <Link className="" href="/admin/contactuser">
+                <button
+                  className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
+                  type="button"
+                >
+                  <Image
+                    src="/images/table-solid.svg"
+                    alt=""
+                    width={24}
+                    height={24}
+                  />
+                  <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                    Liên hệ
+                  </p>
+                </button>
+              </Link>
+            </li>
           </ul>
           <ul className="mb-4 flex flex-col gap-1">
             <li>

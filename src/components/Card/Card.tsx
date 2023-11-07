@@ -31,7 +31,7 @@ const index = () => {
             Xem Chi Tiết
           </Link>
           <span> | </span>
-          <Link href="/auth/signup" className="cursor-pointer">
+          <Link href="/pay" className="cursor-pointer">
             Đặt Sân
           </Link>
         </div>

@@ -8,7 +8,7 @@ const initUser = {
     email: "",
     actived: false,
     status: "",
-    role: "",
+    system_role: "",
     avatar: "",
   },
 };

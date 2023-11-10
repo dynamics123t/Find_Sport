@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import DropDown from "./DropDown";
+import toast from "react-hot-toast";
 import Search from "../Search/Search";
+import { getRequest } from "@/services/base/getRequest";
+interface IProps {
+  id?: string;
+  username?: string;
+  avatar?: string;
+  email?: string;
+  onView: () => void;
+}
 const Header = () => {
+  const [isNameUser, setNameUser] = useState<IProps>();
+  useEffect(() => {
+    getnameuser();
+  }, []);
+  const getnameuser = async () => {
+    try {
+      const data = (await getRequest("/user/me")) as any;
+      console.log(data.data);
+
+      setNameUser(data.data);
+    } catch (error) {
+      toast.error("Server error!");
+    }
+  };
   return (
     <header className="flex w-[full] h-[50px]">
       <div className="right-0 w-[15%] bg-[#2f285a] text-white flex justify-center items-center text-base font-bold gap-3">
@@ -38,7 +61,13 @@ const Header = () => {
         <Link href="/contact" className="cursor-pointer">
           ĐĂNG KÝ ĐỐI TÁC
         </Link>
-        <DropDown></DropDown>
+
+        <DropDown
+          key={isNameUser?.id}
+          username={isNameUser?.username}
+          email={isNameUser?.email}
+          onView={getnameuser}
+        />
       </div>
     </header>
   );

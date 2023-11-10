@@ -3,12 +3,18 @@ import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
 import { removeCookies } from "@/utils/clientCookie";
 import { clearUser } from "@/redux/user/userSlice";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/settings/constants";
 import { useAppDispatch } from "@/redux/hook";
-const DropDown = () => {
+interface IProps {
+  id?: string;
+  username?: string;
+  avatar?: string;
+  email?: string;
+  onView: () => void;
+}
+const DropDown = ({ username, avatar, email }: IProps) => {
   const dispatch = useAppDispatch();
   const [isDropDown, setDropDown] = useState(false);
   const route = useRouter();
@@ -38,9 +44,10 @@ const DropDown = () => {
         <img
           className="w-8 h-8 mr-2 rounded-full"
           src="/images/avt1.jpg"
+          // src={avatar}
           alt="user photo"
         />
-        Nguyễn Duy Tân
+        {username}
         <Image
           className="cursor-pointer"
           src="/images/chevron-24.png"
@@ -53,11 +60,11 @@ const DropDown = () => {
       {isDropDown && (
         <div
           id="dropdownAvatarName"
-          className="z-10 top-10 left-0 absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 "
+          className="z-10 top-10 left-0 absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
         >
           <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-            <div className="font-medium ">Nguyễn Duy Tân</div>
-            <div className="truncate">tan@flowbite.com</div>
+            <div className="font-medium ">{username}</div>
+            <div className="truncate">{email}</div>
           </div>
           <ul
             className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -89,12 +96,12 @@ const DropDown = () => {
             </li>
           </ul>
           <div onClick={handleLogout} className="py-2">
-            <a
-              href="#"
+            <Link
+              href="/"
               className="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100 "
             >
               Đăng xuất
-            </a>
+            </Link>
           </div>
         </div>
       )}

@@ -1,9 +1,8 @@
 import React from "react";
-import Image from "next/image";
 import { useFormik } from "formik";
 import { toast } from "react-hot-toast";
 import { SCHEMA_CHANGE_PASSWORD } from "@/utils/constants/schema";
-import { putRequest } from "@/services/base/putRequest";
+import { postRequest } from "@/services/base/postRequest";
 const ChangePassword = () => {
   const formik = useFormik({
     initialValues: {
@@ -15,7 +14,7 @@ const ChangePassword = () => {
     onSubmit: async (values) => {
       const { old_password, new_password, new_password_confirm } = values;
       try {
-        await putRequest("/auth/reset_password", {
+        await postRequest("/auth/reset_password", {
           old_password,
           new_password,
           new_password_confirm,
@@ -31,19 +30,20 @@ const ChangePassword = () => {
   });
   return (
     <div>
-      {" "}
       <div className="w-full h-full">
-        <div className="max-w-lg h-full mx-auto my-10 bg-white p-8 rounded-xl shadow-[1px_1px_8px_rgba(0,_0,_0,_0.2)] shadow-slate-300 ">
+        <form
+          onSubmit={formik.handleSubmit}
+          className="max-w-lg h-full mx-auto my-10 bg-white p-8 rounded-xl shadow-[1px_1px_8px_rgba(0,_0,_0,_0.2)] shadow-slate-300 "
+        >
           <h1 className="text-4xl font-medium">Đổi mật khẩu</h1>
           <p className="text-slate-500">Điền vào biểu mẫu để đổi mật khẩu</p>
 
-          <form onSubmit={formik.handleSubmit} action="" className="my-10">
+          <div className="my-10">
             <div className="flex flex-col space-y-5">
               <label htmlFor="password">
                 <p className="font-medium text-slate-700 pb-2">Mật khẩu cũ</p>
                 <input
-                  id="password"
-                  name="password_old"
+                  name="old_password"
                   type="password"
                   value={formik.values.old_password}
                   onChange={formik.handleChange}
@@ -54,7 +54,6 @@ const ChangePassword = () => {
               <label htmlFor="password">
                 <p className="font-medium text-slate-700 pb-2">Mật khẩu mới</p>
                 <input
-                  id="password"
                   name="new_password"
                   type="password"
                   value={formik.values.new_password}
@@ -68,7 +67,6 @@ const ChangePassword = () => {
                   Xác nhận mật khẩu
                 </p>
                 <input
-                  id="password"
                   name="new_password_confirm"
                   type="password"
                   value={formik.values.new_password_confirm}
@@ -78,12 +76,15 @@ const ChangePassword = () => {
                 />
               </label>
 
-              <button className="w-full py-3 font-medium text-white bg-green-600 hover:bg-green-500 rounded-lg border-green-500 hover:shadow inline-flex space-x-2 items-center justify-center">
+              <button
+                type="submit"
+                className="w-full py-3 font-medium text-white bg-green-600 hover:bg-green-500 rounded-lg border-green-500 hover:shadow inline-flex space-x-2 items-center justify-center"
+              >
                 <span>Đổi mật khẩu</span>
               </button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   );

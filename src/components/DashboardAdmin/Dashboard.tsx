@@ -1,7 +1,19 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { removeCookies } from "@/utils/clientCookie";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/settings/constants";
+import { clearUser } from "@/redux/user/userSlice";
+import { useAppDispatch } from "@/redux/hook";
 const Dashboard = () => {
+  const route = useRouter();
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    removeCookies([ACCESS_TOKEN, REFRESH_TOKEN]);
+    dispatch(clearUser());
+    route.replace("/");
+  };
   return (
     <div>
       <aside className="bg-gradient-to-br from-green-800 to-green-500 -translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0">
@@ -97,7 +109,7 @@ const Dashboard = () => {
           </ul>
           <ul className="mb-4 flex flex-col gap-1">
             <li>
-              <a className="" href="#">
+              <Link onClick={handleLogout} href="/">
                 <button
                   className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
                   type="button"
@@ -112,7 +124,7 @@ const Dashboard = () => {
                     Đăng xuất
                   </p>
                 </button>
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

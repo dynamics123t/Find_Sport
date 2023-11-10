@@ -5,7 +5,7 @@ const Search = () => {
     <form className="">
       <label
         htmlFor="default-search"
-        className="mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        className="mb-2 text-sm font-medium text-gray-900 "
       />
       <div className="relative">
         <div className="absolute inset-y-0 flex items-center pl-3 pointer-events-none">
@@ -20,7 +20,7 @@ const Search = () => {
         <input
           type="search"
           id="default-search"
-          className="w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg"
+          className="w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 "
           placeholder="Nhập tên sân"
           required
         />

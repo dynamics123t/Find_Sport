@@ -7,10 +7,11 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/settings/constants";
 import { getRequest } from "@/services/base/getRequest";
 import { updateUser } from "@/redux/user/userSlice";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function NoneLayout({ children }: any) {
+  const router = useRouter();
   const pathname = usePathname();
-
   const { currentUser } = useAppSelector((state: RootState) => state.user);
   const dispatch = useAppDispatch();
 
@@ -20,11 +21,12 @@ export default function NoneLayout({ children }: any) {
       } else {
         if (!currentUser.id) {
           await getMe();
+        } else if (currentUser.system_role === "ADMIN") {
+          if (!pathname.startsWith("/admin")) router.push("/admin/dashboard");
         }
       }
     })();
-  }, [pathname]);
-  console.log(currentUser);
+  }, [pathname, currentUser]);
 
   const getMe = async () => {
     try {

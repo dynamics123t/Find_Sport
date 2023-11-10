@@ -1,21 +1,38 @@
-import Footer from "@/components/Footer/footer";
-import Header from "@/components/Headder/header";
 import Card from "@/components/Card/Card";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Heading from "@/components/Heading/Heading";
 import PaginationCustom from "@/components/Pagination/Pagination";
 import CheckboxField from "@/components/CheckboxField/CheckboxField";
-import currentUser from "@/redux/user/userSlice";
+import { getRequest } from "@/services/base/getRequest";
+import toast from "react-hot-toast";
 interface AcceptUsersProps {
   searchParams: {
     page: number;
   };
 }
+interface IProps {
+  id?: string;
+  name?: string;
+  address?: string;
+  price?: string;
+  image?: string;
+  onAccepted: () => void;
+}
 const index = () => {
-  const [isHeader, setHeader] = useState(false);
-  if (currentUser) {
-  } else {
-  }
+  const [ListCard, setListCard] = useState<IProps[]>([]);
+  useEffect(() => {
+    getSport();
+  }, []);
+  const getSport = async () => {
+    try {
+      const data = (await getRequest("/sport/get_all")) as any;
+      console.log(data.data);
+
+      setListCard(data.data);
+    } catch (error) {
+      toast.error("Server error!");
+    }
+  };
   return (
     <div className="w-full h-full">
       <div className="flex flex-col pt-8 pl-8">
@@ -53,10 +70,16 @@ const index = () => {
           <p className="text-[#2F285A] font-normal mt-[-30px] text-lg">
             Danh sách sân bóng đá mini cỏ nhân tạo khắp Đà Nẵng
           </p>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
+          {ListCard.map((items) => (
+            <Card
+              key={items.id}
+              name={items.name}
+              address={items.address}
+              image={items.image}
+              price={items.price}
+              onAccepted={getSport}
+            ></Card>
+          ))}
           <div className="flex justify-center items-center">
             {/* <PaginationCustom
             handleChange={() => {}}

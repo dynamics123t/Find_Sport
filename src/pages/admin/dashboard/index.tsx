@@ -1,21 +1,54 @@
 import Dashboard from "@/components/DashboardAdmin/Dashboard";
 import UserManagement from "@/components/DashboardAdmin/UserManagement";
-import PopupMessage from "@/components/Popup/PopupMessage";
-import React, { useState } from "react";
-
+import { getRequest } from "@/services/base/getRequest";
+import toast from "react-hot-toast";
+import React, { useEffect, useState } from "react";
+import ThreadUser from "@/components/DashboardAdmin/Thread/ThreadUser";
+interface IProps {
+  id?: string;
+  username?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  system_role?: string;
+  created_at?: string;
+  onAccepted: () => void;
+}
 const dashboard = () => {
-  const [isPopup, setPopup] = useState(false);
+  const [ListUser, setListUser] = useState<IProps[]>([]);
+  useEffect(() => {
+    getlistuser();
+  }, []);
+  const getlistuser = async () => {
+    try {
+      const data = (await getRequest("/user/list")) as any;
+      console.log(data.data);
+
+      setListUser(data.data.list_users);
+    } catch (error) {
+      toast.error("Server error!");
+    }
+  };
   return (
     <div>
       <Dashboard />
-      <UserManagement></UserManagement>
-      {/* <PopupMessage
-        maxWidth="max-w-[700px]"
-        isOpen={isPopup}
-        onCLickOutSide={() => setPopup(false)}
-      >
-        <div className="w-[600px]">111</div>
-      </PopupMessage> */}
+      <ThreadUser />
+      {ListUser.length > 0 ? (
+        ListUser.map((user) => (
+          <UserManagement
+            key={user.id}
+            username={user.username}
+            phone={user.phone}
+            email={user.email}
+            address={user.address}
+            system_role={user.system_role}
+            created_at={user.created_at}
+            onAccepted={getlistuser}
+          />
+        ))
+      ) : (
+        <p>No users available</p>
+      )}
     </div>
   );
 };

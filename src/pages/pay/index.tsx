@@ -1,12 +1,12 @@
-import Footer from "@/components/Footer/footer";
-import Header from "@/components/Headder/header";
 import Heading from "@/components/Heading/Heading";
 import PopupMessage from "@/components/Popup/PopupMessage";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const pay = () => {
   const [isPopup, setPopup] = useState(false);
+  const [isChangeText, setChangeText] = useState(false);
   return (
     <div className="w-full h-full">
       <PopupMessage
@@ -69,7 +69,7 @@ const pay = () => {
                     <tr className="bg-white border-b ">
                       <th
                         scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                       >
                         Apple MacBook Pro 17"
                       </th>
@@ -80,7 +80,7 @@ const pay = () => {
                     <tr className="bg-white border-b ">
                       <th
                         scope="row"
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                       >
                         Microsoft Surface Pro
                       </th>
@@ -188,11 +188,18 @@ const pay = () => {
             </div>
             <div className="flex flex-col p-4">
               <p>Số 98 Tiểu La, Hòa Thuận Đông, Hải Châu, Đà Nẵng, Việt Nam</p>
-              <button className="bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded my-[5px]">
+              <Link
+                href="https://www.google.com/maps/d/u/0/viewer?mid=1joN4LtBZ6uaUSlv0fTpGFr8bTOuBgm4&femb=1&ll=16.07053076103764%2C108.20902574218752&z=12"
+                target="_blank"
+                className="flex justify-center items-center bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded my-[5px]"
+              >
                 XEM TRÊN BẢN ĐỒ
-              </button>
-              <button className="bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded">
-                XEM SỐ CHỦ SÂN
+              </Link>
+              <button
+                onClick={() => setChangeText(!isChangeText)}
+                className="bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded"
+              >
+                {isChangeText ? "12344567" : "XEM SỐ CHỦ SÂN"}
               </button>
             </div>
           </div>

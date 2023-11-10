@@ -1,12 +1,27 @@
-import Footer from "@/components/Footer/footer";
-import Header from "@/components/Headder/header";
 import Heading from "@/components/Heading/Heading";
+import PopupMessage from "@/components/Popup/PopupMessage";
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
+import React, { useState } from "react";
 
 const index = () => {
+  const [isPopup, setPopup] = useState(false);
+  const [isChangeText, setChangeText] = useState(false);
   return (
     <div className="w-full h-full">
+      <PopupMessage
+        maxWidth="max-w-[800px]"
+        isOpen={isPopup}
+        onCLickOutSide={() => setPopup(false)}
+      >
+        <div>
+          <img
+            src="/images/sanphui1.png"
+            className="w-[800px] h-[520px]"
+            alt=""
+          />
+        </div>
+      </PopupMessage>
       <div className="w-full flex justify-center items-center">
         <div className="flex flex-col p-8">
           <div className="pb-8">
@@ -15,6 +30,7 @@ const index = () => {
               pageNames={["Trang chủ", "Sân bóng đá", "Sân chuyên việt"]}
             />
             <img
+              onClick={() => setPopup(true)}
               src="/images/sanphui1.png"
               className="w-[800px] h-[520px]"
               alt=""
@@ -54,11 +70,18 @@ const index = () => {
             </div>
             <div className="flex flex-col p-4">
               <p>Số 98 Tiểu La, Hòa Thuận Đông, Hải Châu, Đà Nẵng, Việt Nam</p>
-              <button className="bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded my-[5px]">
+              <Link
+                href="https://www.google.com/maps/d/u/0/viewer?mid=1joN4LtBZ6uaUSlv0fTpGFr8bTOuBgm4&femb=1&ll=16.07053076103764%2C108.20902574218752&z=12"
+                target="_blank"
+                className="flex justify-center items-center bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded my-[5px]"
+              >
                 XEM TRÊN BẢN ĐỒ
-              </button>
-              <button className="bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded">
-                XEM SỐ CHỦ SÂN
+              </Link>
+              <button
+                onClick={() => setChangeText(!isChangeText)}
+                className="bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded"
+              >
+                {isChangeText ? "12344567" : "XEM SỐ CHỦ SÂN"}
               </button>
             </div>
           </div>
@@ -69,9 +92,12 @@ const index = () => {
               <p className="font-semibold text-[16px]">ĐẶT SÂN</p>
             </div>
             <div className="flex flex-col p-4">
-              <button className="bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded my-[5px]">
+              <Link
+                href="/pay"
+                className="flex justify-center items-center bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded my-[5px]"
+              >
                 ĐẶT SÂN NGAY
-              </button>
+              </Link>
             </div>
           </div>
 

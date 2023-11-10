@@ -37,7 +37,6 @@ const index = () => {
       }
     },
   });
-  // console.log(formik.errors);
   return (
     <div className="w-full h-screen flex items-start">
       <div className="relative w-1/2 h-full flex flex-col">

@@ -14,7 +14,7 @@ const noneheaderpathname = [
   "/auth/verifycode",
   "/admin/dashboard",
   "/admin/sportmanagement",
-  "/admin/contacuser",
+  "/admin/contactuser",
 ];
 
 export default function App({ Component, pageProps }: AppProps) {

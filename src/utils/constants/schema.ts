@@ -46,3 +46,29 @@ export const SCHEMA_CHANGE_PASSWORD = yup.object({
     .required(fieldRequired)
     .oneOf([yup.ref("new_password")], "Mật khẩu nhập lại không chính xác"),
 });
+
+export const SCHEMA_CREATE_SPORT = yup.object({
+  name: yup.string().required(fieldRequired),
+  files: yup.array().min(1, "Phải có ít nhất một tệp"),
+  address: yup.string().required(fieldRequired),
+  price: yup.string().required(fieldRequired),
+  description: yup.string().required(),
+  phone: yup
+    .string()
+    .trim()
+    .required()
+    .matches(/^[0-9]*$/),
+});
+
+export const SCHEMA_UPDATE_SPORT = yup.object({
+  name: yup.string().required(fieldRequired).trim(),
+  file_img: yup.array().min(1, "Phải có ít nhất một tệp"),
+  address: yup.string().required(fieldRequired).trim(),
+  price: yup.string().required(fieldRequired).trim(),
+  description: yup.string().required(fieldRequired).trim(),
+  phone: yup
+    .string()
+    .trim()
+    .required()
+    .matches(/^[0-9]*$/),
+});

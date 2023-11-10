@@ -28,8 +28,6 @@ const index = () => {
         toast.success("Đăng kí thành công");
         router.push("/auth/login");
       } catch (error: any) {
-        console.log(error);
-
         if (error.response?.data?.message === "VERIFIED") {
           toast.error("Xác thực tài khoản không thành công");
         } else {

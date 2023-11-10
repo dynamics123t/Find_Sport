@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 const UpdateSport = () => {
   return (
     <div>
@@ -37,6 +36,26 @@ const UpdateSport = () => {
                 type="number"
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Giá tham khảo"
+              />
+            </label>
+            <label htmlFor="description">
+              <p className="font-medium text-slate-700 pb-2">Địa chỉ</p>
+              <input
+                id="description"
+                name="description"
+                type="text"
+                className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
+                placeholder="Chi tiết"
+              />
+            </label>
+            <label htmlFor="phone">
+              <p className="font-medium text-slate-700 pb-2">Địa chỉ</p>
+              <input
+                id="phone"
+                name="phone"
+                type="text"
+                className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
+                placeholder="Số điện thoại chủ sân"
               />
             </label>
             <label htmlFor="file_img">

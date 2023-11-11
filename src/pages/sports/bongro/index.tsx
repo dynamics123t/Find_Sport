@@ -55,10 +55,6 @@ const index = () => {
           <p className="text-[#2F285A] font-normal mt-[-30px] text-lg">
             Danh sách sân bóng rổ khắp Đà Nẵng
           </p>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
           <div className="flex justify-center items-center">
             {/* <PaginationCustom
             handleChange={() => {}}

@@ -1,9 +1,6 @@
-import Footer from "@/components/Footer/footer";
-import Header from "@/components/Headder/header";
 import Contact from "@/components/Contact/Contact";
 import React from "react";
 import Heading from "@/components/Heading/Heading";
-import HeaderAuth from "@/components/Headder/headerAuth";
 
 export const index = () => {
   return (
@@ -20,10 +17,6 @@ export const index = () => {
             <p className="text-[28px] py-[20px] inline-block font-normal">
               Liên hệ
             </p>
-            <Contact label="* Họ và tên" plahoder="Họ và tên" />
-            <Contact label="* Số điện thoại" plahoder="Số điện thoại" />
-            <Contact label="Email" plahoder="Email" />
-            <Contact label="Địa Chỉ" plahoder="Địa chỉ" />
             <div>
               <label
                 htmlFor=""
@@ -34,7 +27,7 @@ export const index = () => {
               <textarea
                 name="message"
                 id="message"
-                rows={4}
+                rows={10}
                 placeholder="Viết nội dung"
                 className="block w-full mb-4 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               ></textarea>

@@ -1,6 +1,14 @@
 import React from "react";
-
-const DetailUser = () => {
+interface IProps {
+  id?: string;
+  username?: string;
+  email?: string;
+  phone?: string;
+  birthday?: string;
+  address?: string;
+  onView: () => void;
+}
+const DetailUser = ({ username, email, phone, birthday, address }: IProps) => {
   return (
     <div>
       <div className="bg-white overflow-hidden shadow rounded-lg border">
@@ -14,13 +22,13 @@ const DetailUser = () => {
             <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Tên</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                Nguyễn Duy Tân
+                {username}
               </dd>
             </div>
             <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Email</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                tannguyen512001@gmail.com
+                {email}
               </dd>
             </div>
             <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -28,19 +36,19 @@ const DetailUser = () => {
                 Số điện thoại
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                0987654312
+                {phone}
               </dd>
             </div>
             <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Ngày sinh</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                05-01-2001
+                {birthday}
               </dd>
             </div>
             <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Địa chỉ</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                566 Núi Thành, Hoà Cường Nam, Hải Châu, Đà Nẵng
+                {address}
               </dd>
             </div>
           </dl>

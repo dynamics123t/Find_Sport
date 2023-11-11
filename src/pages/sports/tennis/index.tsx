@@ -56,10 +56,7 @@ const index = () => {
           <p className="text-[#2F285A] font-normal mt-[-30px] text-lg">
             Danh sách sân cầu lông khắp Đà Nẵng
           </p>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
+
           <div className="flex justify-center items-center">
             {/* <PaginationCustom
             handleChange={() => {}}

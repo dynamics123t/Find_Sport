@@ -3,44 +3,41 @@ import { useFormik } from "formik";
 import { SCHEMA_CREATE_SPORT } from "@/utils/constants/schema";
 import { postRequest } from "@/services/base/postRequest";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/router";
 const CreateSport = () => {
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      namesport: "",
+      name: "",
       address: "",
       price: "",
       description: "",
       phone: "",
-      file_img: "",
+      img: "",
     },
 
     validationSchema: SCHEMA_CREATE_SPORT,
 
-    onSubmit: async ({
-      namesport,
-      file_img,
-      address,
-      price,
-      description,
-      phone,
-    }) => {
+    onSubmit: async (values) => {
+      const form = new FormData();
+      const { name, address, price, description, phone, img } = values;
       try {
-        await postRequest("/sport/create", {
-          name: namesport,
-          img: file_img,
+        const data = await postRequest("/sport/create", {
+          name: name,
+          img: form.append("my_file", img),
           address: address,
           price: price,
           description: description,
           phone: phone,
         });
+
         toast.success("Tạo sân thành công");
-        console.log("123121232");
+        formik.resetForm();
+        router.reload();
       } catch (error: any) {
-        if (error.response?.data?.statusCode === 404) {
-          toast.error("This is an error!");
-        } else {
-          toast.error("serverError");
-        }
+        toast.error(
+          `Thêm không thành công : ${error.response?.data?.detail?.message}`
+        );
       }
     },
   });
@@ -50,94 +47,82 @@ const CreateSport = () => {
       <div className="w-full h-full">
         <h1 className="text-4xl font-medium">Thêm mới sân thể thao</h1>
 
-        <form onSubmit={formik.handleSubmit} className="my-10">
-          <div className="flex flex-col space-y-5">
+        <form onSubmit={formik.handleSubmit}>
+          <div className="flex flex-col space-y-2">
             <label htmlFor="name">
               <p className="font-medium text-slate-700 pb-2">Tên sân</p>
               <input
-                id="name"
-                name="namesport"
+                name="name"
                 type="text"
-                value={formik.values.namesport}
+                value={formik.values.name}
                 onChange={formik.handleChange}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Tên sân"
-                required
               />
             </label>
             <label htmlFor="address">
               <p className="font-medium text-slate-700 pb-2">Địa chỉ</p>
               <input
-                id="address"
                 name="address"
                 type="text"
                 value={formik.values.address}
                 onChange={formik.handleChange}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Địa chỉ"
-                required
               />
             </label>
             <label htmlFor="price">
               <p className="font-medium text-slate-700 pb-2">Giá tham khảo</p>
               <input
-                id="price"
                 name="price"
                 type="number"
                 value={formik.values.price}
                 onChange={formik.handleChange}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Giá tham khảo"
-                required
               />
             </label>
             <label htmlFor="description">
               <p className="font-medium text-slate-700 pb-2">Chi tiết</p>
               <input
-                id="description"
                 name="description"
                 type="text"
                 value={formik.values.description}
                 onChange={formik.handleChange}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Chi tiết"
-                required
               />
             </label>
             <label htmlFor="phone">
               <p className="font-medium text-slate-700 pb-2">Số điện thoại</p>
               <input
-                id="phone"
                 name="phone"
                 type="tel"
                 value={formik.values.phone}
                 onChange={formik.handleChange}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Số điện thoại chủ sân"
-                required
               />
             </label>
-            <label htmlFor="file_img">
+            <label htmlFor="img">
               <p className="font-medium text-slate-700 pb-2">Hình ảnh</p>
               <input
-                id="file_img"
-                name="file_img"
+                name="img"
                 type="file"
-                value={formik.values.file_img}
+                value={formik.values.img}
                 onChange={formik.handleChange}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Hình ảnh"
               />
-              <p className="mt-1 text-sm text-gray-500" id="file_input_help">
+              <p className="mt-1 text-sm text-gray-500">
                 SVG, PNG, JPG or GIF.
               </p>
             </label>
-
             <button
               type="submit"
               className="w-full py-3 font-medium text-white bg-green-600 hover:bg-green-500 rounded-lg border-green-500 hover:shadow inline-flex space-x-2 items-center justify-center"
             >
-              Thêm mới sân
+              <span>Thêm sân</span>
             </button>
           </div>
         </form>

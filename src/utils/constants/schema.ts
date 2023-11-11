@@ -49,7 +49,7 @@ export const SCHEMA_CHANGE_PASSWORD = yup.object({
 
 export const SCHEMA_CREATE_SPORT = yup.object({
   name: yup.string().required(fieldRequired),
-  files: yup.array().min(1, "Phải có ít nhất một tệp"),
+  img: yup.array().min(1, "Phải có ít nhất một tệp"),
   address: yup.string().required(fieldRequired),
   price: yup.string().required(fieldRequired),
   description: yup.string().required(),
@@ -62,7 +62,7 @@ export const SCHEMA_CREATE_SPORT = yup.object({
 
 export const SCHEMA_UPDATE_SPORT = yup.object({
   name: yup.string().required(fieldRequired).trim(),
-  file_img: yup.array().min(1, "Phải có ít nhất một tệp"),
+  img: yup.array().min(1, "Phải có ít nhất một tệp"),
   address: yup.string().required(fieldRequired).trim(),
   price: yup.string().required(fieldRequired).trim(),
   description: yup.string().required(fieldRequired).trim(),
@@ -71,4 +71,19 @@ export const SCHEMA_UPDATE_SPORT = yup.object({
     .trim()
     .required()
     .matches(/^[0-9]*$/),
+});
+
+export const SCHEMA_UPDATE_USER = yup.object({
+  username: yup.string().required(),
+  phone: yup
+    .string()
+    .trim()
+    .required()
+    .matches(/^[0-9]*$/),
+  birthday: yup.string().trim().required(),
+  address: yup.string().required(fieldRequired).trim(),
+});
+
+export const SCHEMA_UPDATE_AVATAR = yup.object().shape({
+  data_avatar: yup.mixed().required(fieldRequired),
 });

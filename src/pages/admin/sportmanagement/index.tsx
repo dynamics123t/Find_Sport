@@ -16,14 +16,17 @@ interface IProps {
   onView: () => void;
 }
 const sportmanagement = () => {
+  const [Load, setLoad] = useState<boolean>(false);
   const [ListSport, setListSport] = useState<IProps[]>([]);
   useEffect(() => {
     getlistsport();
-  }, []);
+  }, [Load]);
+  const load = () => {
+    setLoad(!Load);
+  };
   const getlistsport = async () => {
     try {
       const data = (await getRequest("/sport/get_all")) as any;
-      console.log(data.data);
 
       setListSport(data.data);
     } catch (error) {
@@ -37,6 +40,7 @@ const sportmanagement = () => {
       {ListSport.length > 0 ? (
         ListSport.map((sport) => (
           <SportManagement
+            id={sport.id}
             key={sport.id}
             img={sport.img}
             name={sport.name}
@@ -46,6 +50,7 @@ const sportmanagement = () => {
             description={sport.description}
             created_at={sport.created_at}
             onView={getlistsport}
+            onLoad={load}
           />
         ))
       ) : (

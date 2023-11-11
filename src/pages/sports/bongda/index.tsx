@@ -26,7 +26,6 @@ const index = () => {
   const getSport = async () => {
     try {
       const data = (await getRequest("/sport/get_all")) as any;
-      console.log(data.data);
 
       setListCard(data.data);
     } catch (error) {

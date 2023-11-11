@@ -22,7 +22,6 @@ const dashboard = () => {
   const getlistuser = async () => {
     try {
       const data = (await getRequest("/user/list")) as any;
-      console.log(data.data);
 
       setListUser(data.data.list_users);
     } catch (error) {

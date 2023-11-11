@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
+import PopupMessage from "@/components/Popup/PopupMessage";
+import CreateSport from "@/components/Sport/CreateSport";
 const ThreadSport = () => {
+  const [isPopup, setPopup] = useState(false);
   return (
     <div>
+      <PopupMessage
+        maxWidth="max-w-[700px]"
+        isOpen={isPopup}
+        onCLickOutSide={() => setPopup(false)}
+      >
+        <div className="w-[600px]">
+          <CreateSport></CreateSport>
+        </div>
+      </PopupMessage>
       <div className="relative overflow-x-auto shadow-md">
         <div className="pb-4 bg-white ml-80 mt-6">
           <label htmlFor="table-search" className="sr-only">
@@ -25,7 +37,13 @@ const ThreadSport = () => {
             />
           </div>
         </div>
-        <table className="w-[80%] text-sm text-left text-gray-500  ml-auto mt-6">
+        <button
+          onClick={() => setPopup(true)}
+          className="text-white ml-80 bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2"
+        >
+          Thêm sân thể thao
+        </button>
+        <table className="w-[80%] text-sm text-left text-gray-500 ml-auto">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
             <tr>
               <th scope="col" className="px-6 py-3">

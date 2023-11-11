@@ -20,7 +20,6 @@ const Header = () => {
   const getnameuser = async () => {
     try {
       const data = (await getRequest("/user/me")) as any;
-      console.log(data.data);
 
       setNameUser(data.data);
     } catch (error) {

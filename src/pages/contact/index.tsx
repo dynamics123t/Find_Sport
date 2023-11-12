@@ -1,8 +1,35 @@
-import Contact from "@/components/Contact/Contact";
 import React from "react";
+import { useFormik } from "formik";
+import { useRouter } from "next/router";
+import { toast } from "react-hot-toast";
 import Heading from "@/components/Heading/Heading";
+import { postRequest } from "@/services/base/postRequest";
+import { SCHEMA_CONTACT } from "@/utils/constants/schema";
 
 export const index = () => {
+  const router = useRouter();
+  const formik = useFormik({
+    initialValues: {
+      content: "",
+    },
+    validationSchema: SCHEMA_CONTACT,
+
+    onSubmit: async ({ content }) => {
+      try {
+        await postRequest("contact/create", {
+          content: content,
+        });
+        toast.success("Bạn đã gửi liên hệ thành công!!!");
+        router.reload();
+      } catch (error: any) {
+        if (error.response?.data?.statusCode === 404) {
+          toast.error("This is an error!");
+        } else {
+          toast.error("serverError");
+        }
+      }
+    },
+  });
   return (
     <div className="w-full h-full">
       <div>
@@ -13,7 +40,10 @@ export const index = () => {
           />
         </div>
         <div className="flex">
-          <div className="w-1/2 flex flex-col ml-[30px]">
+          <form
+            onSubmit={formik.handleSubmit}
+            className="w-1/2 flex flex-col ml-[30px]"
+          >
             <p className="text-[28px] py-[20px] inline-block font-normal">
               Liên hệ
             </p>
@@ -25,8 +55,9 @@ export const index = () => {
                 Nội dung
               </label>
               <textarea
-                name="message"
-                id="message"
+                name="content"
+                value={formik.values.content}
+                onChange={formik.handleChange}
                 rows={10}
                 placeholder="Viết nội dung"
                 className="block w-full mb-4 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -35,7 +66,7 @@ export const index = () => {
                 Gửi liên hệ
               </button>
             </div>
-          </div>
+          </form>
           <div className="w-1/2 m-8 border-2">
             <iframe
               className="p-8"

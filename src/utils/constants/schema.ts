@@ -87,3 +87,11 @@ export const SCHEMA_UPDATE_USER = yup.object({
 export const SCHEMA_UPDATE_AVATAR = yup.object().shape({
   data_avatar: yup.mixed().required(fieldRequired),
 });
+
+export const SCHEMA_FORGET_PASSWORD = yup.object({
+  email: yup.string().required(),
+});
+
+export const SCHEMA_CONTACT = yup.object({
+  content: yup.string().required(fieldRequired).trim(),
+});

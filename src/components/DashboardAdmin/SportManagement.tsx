@@ -53,7 +53,9 @@ const SportManagement = ({
         <table className="w-[80%] text-sm text-left text-gray-500 ml-auto">
           <tbody>
             <tr className="bg-white border-b ">
-              <td className="w-32 p-4">{img}</td>
+              <td className="w-32 p-4">
+                <img src={img} alt="" />
+              </td>
               <th
                 scope="row"
                 className="px-6 py-4 bg-gray-100 font-medium text-gray-900 whitespace-nowrap"

@@ -35,16 +35,14 @@ const DropDown = ({ username, avatar, email }: IProps) => {
     <div className="relative" ref={dropDownRef}>
       <button
         onClick={() => setDropDown(!isDropDown)}
-        id="dropdownAvatarNameButton"
-        data-dropdown-toggle="dropdownAvatarName"
         className="flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-blue-600  md:mr-0 focus:ring-4 focus:ring-gray-100 "
         type="button"
       >
         <span className="sr-only">Open user menu</span>
         <img
           className="w-8 h-8 mr-2 rounded-full"
-          src="/images/avt1.jpg"
-          // src={avatar}
+          // src="/images/avt1.jpg"
+          src={avatar}
           alt="user photo"
         />
         {username}

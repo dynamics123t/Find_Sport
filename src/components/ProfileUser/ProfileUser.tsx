@@ -3,24 +3,57 @@ import DetailUser from "./DetailUser";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import PopupMessage from "../Popup/PopupMessage";
+import { useRouter } from "next/router";
 import PopupUser from "./PopupUser";
 import { getRequest } from "@/services/base/getRequest";
+import { useFormik } from "formik";
+import { SCHEMA_UPDATE_AVATAR } from "@/utils/constants/schema";
+import { postRequest } from "@/services/base/postRequest";
+import { updatePartialUser } from "@/redux/user/userSlice";
+import { useAppDispatch } from "@/redux/hook";
 interface IProps {
   id?: string;
   username?: string;
   email?: string;
   phone?: string;
+  avatar?: string;
   birthday?: string;
   address?: string;
   onView: () => void;
 }
 const ProfileUser = () => {
+  const [avatar, setVartar] = useState<File | null>(null);
   const [isAvatar, setAvatar] = useState(false);
   const [isPopup, setPopup] = useState(false);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const [isNameUser, setNameUser] = useState<IProps>();
   useEffect(() => {
     getnameuser();
   }, []);
+
+  const handleSubmit = async () => {
+    if (!avatar) return;
+    try {
+      const form = new FormData();
+      form.append("avatar", avatar);
+
+      const data: any = await postRequest("/user/upload_avatar", form, {
+        "Content-Type": "multipart/form-data",
+      });
+
+      dispatch(
+        updatePartialUser({
+          actived: true,
+          avatar: data.avatar,
+        })
+      );
+      // router.replace("/");
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      toast.error("Error uploading avatar");
+    }
+  };
   const getnameuser = async () => {
     try {
       const data = (await getRequest("/user/me")) as any;
@@ -40,6 +73,39 @@ const ProfileUser = () => {
           <PopupUser></PopupUser>
         </div>
       </PopupMessage>
+      <PopupMessage
+        maxWidth="max-w-[400px]"
+        isOpen={isAvatar}
+        onCLickOutSide={() => setAvatar(false)}
+      >
+        <div className="w-[300px]">
+          <form>
+            <label>
+              <p className="font-medium text-slate-400 pb-2">
+                Upload ảnh đại diện
+              </p>
+              <input
+                id="avatar"
+                name="avatar"
+                type="file"
+                accept="image/*"
+                onChange={(e) =>
+                  setVartar(e.target.files ? e.target.files[0] : null)
+                }
+                className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
+              />
+            </label>
+            <button
+              type="submit"
+              // disabled={!avatar}
+              onClick={handleSubmit}
+              className="w-full py-3 mt-6 font-medium text-white bg-green-600 hover:bg-green-500 rounded-lg border-green-500 hover:shadow inline-flex space-x-2 items-center justify-center"
+            >
+              <span>Upload ảnh</span>
+            </button>
+          </form>
+        </div>
+      </PopupMessage>
       <div>
         <div className="w-[95%] mx-auto mt-10 bg-white shadow-xl rounded-lg text-gray-900">
           <div className="rounded-t-lg h-32 overflow-hidden">
@@ -55,13 +121,12 @@ const ProfileUser = () => {
           >
             <img
               className="object-cover object-center h-32 hover:opacity-90"
-              src="/images/avatar.jpg"
-              alt="Woman looking front"
+              src={isNameUser?.avatar}
             />
           </div>
           <div className="text-center mt-2">
             <h2 className="font-semibold">{isNameUser?.username}</h2>
-            <p className="text-gray-500">Vua phá lưới</p>
+            <p className="text-gray-500">{isNameUser?.email}</p>
           </div>
           <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">
             <li className="flex flex-col items-center justify-around">

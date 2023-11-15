@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
+import { getRequest } from "@/services/base/getRequest";
+import { useRouter } from "next/router";
 const Search = () => {
+  const [Find, setFind] = useState("");
+  const router = useRouter();
+  function handleChange(event: any) {
+    setFind(event.target.value);
+  }
   return (
-    <form className="">
+    <div className="">
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 "
@@ -19,19 +28,25 @@ const Search = () => {
         </div>
         <input
           type="search"
-          id="default-search"
+          value={Find}
+          onChange={handleChange}
           className="w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 "
           placeholder="Nhập tên sân"
-          required
         />
         <button
           type="submit"
+          onClick={() =>
+            router.replace({
+              query: { ...router.query, search: Find },
+              pathname: router.pathname,
+            })
+          }
           className="text-white absolute right-2.5 bottom-2.5 bg-[#56E07B] hover:bg-[#33FF33] font-medium rounded-lg text-sm px-4 py-2"
         >
           Tìm
         </button>
       </div>
-    </form>
+    </div>
   );
 };
 

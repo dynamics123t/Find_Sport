@@ -85,7 +85,7 @@ export const SCHEMA_UPDATE_USER = yup.object({
 });
 
 export const SCHEMA_UPDATE_AVATAR = yup.object().shape({
-  data_avatar: yup.mixed().required(fieldRequired),
+  avatar: yup.mixed().required(fieldRequired),
 });
 
 export const SCHEMA_FORGET_PASSWORD = yup.object({

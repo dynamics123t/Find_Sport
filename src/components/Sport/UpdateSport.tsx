@@ -1,14 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import { SCHEMA_UPDATE_SPORT } from "@/utils/constants/schema";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";
 import { putRequest } from "@/services/base/putRequest";
+import { postRequest } from "@/services/base/postRequest";
 interface IdProps {
   id?: string;
 }
 const UpdateSport = ({ id }: IdProps) => {
+  const [file, setImage] = useState<File | null>(null);
   const router = useRouter();
+  const [dataImage, setDataImage] = useState<string>("");
+
+  const handleSubmit = async () => {
+    if (!file) return;
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res: any = await postRequest("/upload", form, {
+        "Content-Type": "multipart/form-data",
+      });
+
+      setDataImage(res);
+    } catch (error) {
+      setDataImage("");
+      console.error("Error uploading :", error);
+      toast.error("Error uploading");
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -22,17 +43,18 @@ const UpdateSport = ({ id }: IdProps) => {
     validationSchema: SCHEMA_UPDATE_SPORT,
 
     onSubmit: async (values) => {
-      const { name, address, price, description, phone, img } = values;
+      const { name, address, price, description, phone } = values;
 
       try {
         const data = await putRequest(`/sport/${id}/update`, {
           name: name,
-          img: img,
           address: address,
           price: price,
           description: description,
           phone: phone,
+          img: dataImage,
         });
+        setDataImage("");
         toast.success("Sửa sân thành công");
         formik.resetForm();
         router.reload();
@@ -111,8 +133,10 @@ const UpdateSport = ({ id }: IdProps) => {
               <input
                 name="img"
                 type="file"
-                value={formik.values.img}
-                onChange={formik.handleChange}
+                accept="image/*"
+                onChange={(e) =>
+                  setImage(e.target.files ? e.target.files[0] : null)
+                }
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Hình ảnh"
               />
@@ -122,6 +146,7 @@ const UpdateSport = ({ id }: IdProps) => {
             </label>
             <button
               type="submit"
+              onClick={handleSubmit}
               className="w-full py-3 font-medium text-white bg-green-600 hover:bg-green-500 rounded-lg border-green-500 hover:shadow inline-flex space-x-2 items-center justify-center"
             >
               <span>Sửa sân</span>
@@ -134,6 +159,3 @@ const UpdateSport = ({ id }: IdProps) => {
 };
 
 export default UpdateSport;
-function useState<T>(): [any, any] {
-  throw new Error("Function not implemented.");
-}

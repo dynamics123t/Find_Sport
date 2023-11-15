@@ -5,38 +5,50 @@ import PaginationCustom from "@/components/Pagination/Pagination";
 import CheckboxField from "@/components/CheckboxField/CheckboxField";
 import { getRequest } from "@/services/base/getRequest";
 import toast from "react-hot-toast";
-interface AcceptUsersProps {
-  searchParams: {
-    page: number;
-  };
-}
+import { useSearchParams } from "next/navigation";
+import Search from "@/components/Search/Search";
+import { useRouter } from "next/router";
 interface IProps {
   id?: string;
   name?: string;
   address?: string;
   price?: string;
-  image?: string;
+  img?: string;
   onAccepted: () => void;
 }
 const index = () => {
+  const searchParams = useSearchParams();
+  const [totalSport, setTotalSport] = useState<number>();
+  const page = Number(searchParams.get("page")) || 1;
+  const q = useSearchParams().get("search") || "";
   const [ListCard, setListCard] = useState<IProps[]>([]);
+
   useEffect(() => {
     getSport();
-  }, []);
+  }, [page, q]);
+
   const getSport = async () => {
     try {
-      const data = (await getRequest("/sport/get_all")) as any;
+      const data: any = await getRequest(
+        `/sport/get_all?name=${q}&skip=${(page - 1) * 4}&limit=${4}`
+      );
 
-      setListCard(data.data);
+      setListCard(data.data.result);
+      setTotalSport(data.data.count);
     } catch (error) {
       toast.error("Server error!");
     }
   };
+
   return (
     <div className="w-full h-full">
-      <div className="flex flex-col pt-8 pl-8">
+      <div className="flex pt-8 pl-8">
         <Heading title="Bóng Đá" pageNames={["Trang chủ", "Sân bóng đá"]} />
+        <div className="w-1/2 pr-8">
+          <Search />
+        </div>
       </div>
+
       <div className="flex justify-center">
         <div className="w-1/5 mt-10">
           <h3 className="text-[25px] mb-4 font-semibold text-gray-900">
@@ -69,23 +81,23 @@ const index = () => {
           <p className="text-[#2F285A] font-normal mt-[-30px] text-lg">
             Danh sách sân bóng đá mini cỏ nhân tạo khắp Đà Nẵng
           </p>
-          {ListCard.map((items) => (
+          {ListCard?.map((items) => (
             <Card
               key={items.id}
               name={items.name}
               address={items.address}
-              image={items.image}
+              img={items.img}
               price={items.price}
               onAccepted={getSport}
             ></Card>
           ))}
-          <div className="flex justify-center items-center">
-            {/* <PaginationCustom
-            handleChange={() => {}}
-            page={page}
-            total_record={total}
-            record_per_page={10}
-          /> */}
+          <div className="flex mt-10 justify-center items-center">
+            <PaginationCustom
+              handleChange={() => {}}
+              page={page}
+              total_record={totalSport || 0}
+              record_per_page={4}
+            />
           </div>
         </div>
       </div>

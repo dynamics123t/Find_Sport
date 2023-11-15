@@ -40,9 +40,7 @@ const Header = () => {
         <Link href="/">SPORT FINDER</Link>
       </div>
       <div className="flex left-0 w-[55%] justify-end bg-[#56e07b] items-center text-[#2f285a] text-base font-bold pe-8 gap-8 rounded-br-full">
-        <div className="mr-auto w-[46%]">
-          <Search></Search>
-        </div>
+        <div className="mr-auto w-[46%]"></div>
         <Link href="/sports/bongda" className="cursor-pointer">
           BÓNG ĐÁ
         </Link>
@@ -63,6 +61,7 @@ const Header = () => {
 
         <DropDown
           key={isNameUser?.id}
+          avatar={isNameUser?.avatar}
           username={isNameUser?.username}
           email={isNameUser?.email}
           onView={getnameuser}

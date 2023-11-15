@@ -19,7 +19,6 @@ const contactuser = () => {
   const getlistcontact = async () => {
     try {
       const data = (await getRequest("/contact/get")) as any;
-      console.log(data);
       setListContact(data);
     } catch (error) {
       toast.error("Server error!");

@@ -1,12 +1,38 @@
 import Heading from "@/components/Heading/Heading";
 import PopupMessage from "@/components/Popup/PopupMessage";
+import { getRequest } from "@/services/base/getRequest";
 import Image from "next/image";
+import toast from "react-hot-toast";
 import Link from "next/link";
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+interface IProps {
+  id?: string;
+  img?: string;
+  name?: string;
+  price?: string;
+  phone?: string;
+  address?: string;
+  description?: string;
+  created_at?: string;
+  onView: () => void;
+}
 const index = () => {
   const [isPopup, setPopup] = useState(false);
   const [isChangeText, setChangeText] = useState(false);
+  const [ListSport, setListSport] = useState<IProps>();
+  useEffect(() => {
+    getlistsport();
+  }, []);
+  const getlistsport = async () => {
+    try {
+      const data = (await getRequest("/sport/get_all")) as any;
+
+      setListSport(data.data.result);
+      console.log(data.data.result);
+    } catch (error) {
+      toast.error("Server error!");
+    }
+  };
   return (
     <div className="w-full h-full">
       <PopupMessage
@@ -81,7 +107,7 @@ const index = () => {
                 onClick={() => setChangeText(!isChangeText)}
                 className="bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded"
               >
-                {isChangeText ? "12344567" : "XEM SỐ CHỦ SÂN"}
+                {isChangeText ? ListSport?.name : "XEM SỐ CHỦ SÂN"}
               </button>
             </div>
           </div>
@@ -171,7 +197,7 @@ const index = () => {
           <form className="mb-6">
             <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
               <label htmlFor="comment" className="sr-only">
-                Your comment
+                Nhập bình luận
               </label>
               <textarea
                 id="comment"

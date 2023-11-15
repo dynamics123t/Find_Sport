@@ -2,8 +2,10 @@ import Dashboard from "@/components/DashboardAdmin/Dashboard";
 import SportManagement from "@/components/DashboardAdmin/SportManagement";
 import toast from "react-hot-toast";
 import { getRequest } from "@/services/base/getRequest";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import ThreadSport from "@/components/DashboardAdmin/Thread/ThreadSport";
+import PaginationCustom from "@/components/Pagination/Pagination";
 interface IProps {
   id?: string;
   img?: string;
@@ -17,18 +19,25 @@ interface IProps {
 }
 const sportmanagement = () => {
   const [Load, setLoad] = useState<boolean>(false);
+  const searchParams = useSearchParams();
   const [ListSport, setListSport] = useState<IProps[]>([]);
+  const [totalSport, setTotalSport] = useState<number>();
+  const page = Number(searchParams.get("page")) || 1;
+  const q = useSearchParams().get("search") || "";
   useEffect(() => {
     getlistsport();
-  }, [Load]);
+  }, [Load, page]);
   const load = () => {
     setLoad(!Load);
   };
   const getlistsport = async () => {
     try {
-      const data = (await getRequest("/sport/get_all")) as any;
+      const data: any = await getRequest(
+        `/sport/get_all?name=${q}&skip=${(page - 1) * 10}&limit=${10}`
+      );
 
-      setListSport(data.data);
+      setListSport(data.data.result);
+      setTotalSport(data.data.count);
     } catch (error) {
       toast.error("Server error!");
     }
@@ -56,6 +65,14 @@ const sportmanagement = () => {
       ) : (
         <p>No sports available</p>
       )}
+      <div className="flex justify-center items-center">
+        <PaginationCustom
+          handleChange={() => {}}
+          page={page}
+          total_record={totalSport || 0}
+          record_per_page={10}
+        />
+      </div>
     </div>
   );
 };

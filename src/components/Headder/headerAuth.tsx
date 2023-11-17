@@ -23,7 +23,7 @@ const Header = () => {
 
       setNameUser(data.data);
     } catch (error) {
-      toast.error("Server error!");
+      // toast.error("Server error!");
     }
   };
   return (

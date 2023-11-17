@@ -7,7 +7,6 @@ import { getRequest } from "@/services/base/getRequest";
 import toast from "react-hot-toast";
 import { useSearchParams } from "next/navigation";
 import Search from "@/components/Search/Search";
-import { useRouter } from "next/router";
 interface IProps {
   id?: string;
   name?: string;
@@ -22,7 +21,6 @@ const index = () => {
   const page = Number(searchParams.get("page")) || 1;
   const q = useSearchParams().get("search") || "";
   const [ListCard, setListCard] = useState<IProps[]>([]);
-
   useEffect(() => {
     getSport();
   }, [page, q]);
@@ -84,6 +82,7 @@ const index = () => {
           {ListCard?.map((items) => (
             <Card
               key={items.id}
+              id={items.id}
               name={items.name}
               address={items.address}
               img={items.img}

@@ -35,7 +35,7 @@ export default function Layout({ children }: any) {
       const data: any = await getRequest("/user/me");
       dispatch(updateUser({ ...data.data }));
     } catch (error: any) {
-      toast.error("System error");
+      // toast.error("System error");
     }
   };
 

@@ -13,10 +13,16 @@ interface IProps {
   phone?: string;
   address?: string;
   description?: string;
-  created_at?: string;
-  onView: () => void;
 }
-const index = () => {
+const index = ({
+  id,
+  img,
+  name,
+  price,
+  phone,
+  address,
+  description,
+}: IProps) => {
   const [isPopup, setPopup] = useState(false);
   const [isChangeText, setChangeText] = useState(false);
   const [ListSport, setListSport] = useState<IProps>();
@@ -25,10 +31,10 @@ const index = () => {
   }, []);
   const getlistsport = async () => {
     try {
-      const data = (await getRequest("/sport/get_all")) as any;
+      const data = await getRequest(`/sport/${id}`, {});
+      console.log(data);
 
-      setListSport(data.data.result);
-      console.log(data.data.result);
+      setListSport(data);
     } catch (error) {
       toast.error("Server error!");
     }
@@ -41,11 +47,7 @@ const index = () => {
         onCLickOutSide={() => setPopup(false)}
       >
         <div>
-          <img
-            src="/images/sanphui1.png"
-            className="w-[800px] h-[520px]"
-            alt=""
-          />
+          <img src={img} className="w-[800px] h-[520px]" alt="" />
         </div>
       </PopupMessage>
       <div className="w-full flex justify-center items-center">
@@ -57,7 +59,7 @@ const index = () => {
             />
             <img
               onClick={() => setPopup(true)}
-              src="/images/sanphui1.png"
+              src={img}
               className="w-[800px] h-[520px]"
               alt=""
             />
@@ -71,13 +73,7 @@ const index = () => {
               <p className="font-bold text-[24px] mb-3">
                 Bạn muốn thuê sân bóng đá Chuyên Việt
               </p>
-              <p>
-                Sân bóng Chuyên Việt là sân bóng lâu đời, mới được chủ đầu tư
-                chỉnh trang, nâng cấp và đang là một trong những sân bóng đẹp
-                nhất Đà Nẵng. Với vị trí vô cùng thuận lợi, nằm ngay mặt đường
-                chính, đối diện trường học có cây xanh mát, sân bóng chuyên việt
-                đã trở thành địa điểm giao lưu hàng đầu.
-              </p>
+              <p>{ListSport?.description}</p>
               <iframe
                 className="mt-5"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15338.283354504956!2d108.21011974998179!3d16.035840954218735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314219c0801817c3%3A0x1702bb03f6985b2f!2zU8OibiBiw7NuZyDEkcOhIENodXnDqm4gVmnhu4d0!5e0!3m2!1svi!2s!4v1697477330405!5m2!1svi!2s"
@@ -107,7 +103,7 @@ const index = () => {
                 onClick={() => setChangeText(!isChangeText)}
                 className="bg-white hover:border-green-600 hover:text-green-600 text-black font-normal py-2 px-4 border border-black rounded"
               >
-                {isChangeText ? ListSport?.name : "XEM SỐ CHỦ SÂN"}
+                {isChangeText ? phone : "XEM SỐ CHỦ SÂN"}
               </button>
             </div>
           </div>

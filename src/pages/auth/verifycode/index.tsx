@@ -56,9 +56,9 @@ const index = () => {
 
         <div className="w-full flex flex-col max-w-[550px]">
           <div className="w-full flex flex-col mb-2">
-            <h3 className="text-3xl font-semibold mb-2">Đăng ký tài khoản</h3>
+            <h3 className="text-3xl font-semibold mb-2">Xác thực tài khoản</h3>
             <p className="text-base mb-2">
-              Để đăng ký tài khoản! Vui lòng nhập thông tin.
+              Để xác thực tài khoản! Vui lòng nhập thông tin.
             </p>
           </div>
           <div className="w-full flex flex-col">

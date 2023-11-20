@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { SCHEMA_UPDATE_SPORT } from "@/utils/constants/schema";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";
 import { putRequest } from "@/services/base/putRequest";
 import { postRequest } from "@/services/base/postRequest";
+import { getRequest } from "@/services/base/getRequest";
 interface IdProps {
   id?: string;
 }
@@ -12,6 +13,22 @@ const UpdateSport = ({ id }: IdProps) => {
   const [file, setImage] = useState<File | null>(null);
   const router = useRouter();
   const [dataImage, setDataImage] = useState<string>("");
+  const [initialData, setInitialData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedData = await getRequest(`/sport/${id}`);
+        setInitialData(fetchedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
 
   const handleSubmit = async () => {
     if (!file) return;
@@ -32,12 +49,12 @@ const UpdateSport = ({ id }: IdProps) => {
 
   const formik = useFormik({
     initialValues: {
-      name: "",
-      address: "",
-      price: "",
-      description: "",
-      phone: "",
-      img: "",
+      name: initialData?.name || "",
+      address: initialData?.address || "",
+      price: initialData?.price || "",
+      description: initialData?.description || "",
+      phone: initialData?.phone || "",
+      img: initialData?.img || "",
     },
 
     validationSchema: SCHEMA_UPDATE_SPORT,

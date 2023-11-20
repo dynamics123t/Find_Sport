@@ -69,14 +69,15 @@ const SportManagement = ({
               <td className="px-6 py-4">{created_at}</td>
               <td className="px-6 py-4 bg-gray-100">
                 <a
+                  id={id}
                   onClick={() => setPopupU(true)}
-                  className="font-medium text-blue-600 hover:underline"
+                  className="font-medium text-blue-600 hover:cursor-pointer"
                 >
                   Edit
                 </a>
                 <a
                   onClick={handleCancel}
-                  className="ml-2 font-medium text-red-600 hover:underline"
+                  className="ml-2 font-medium text-red-600 hover:cursor-pointer"
                 >
                   Delete
                 </a>

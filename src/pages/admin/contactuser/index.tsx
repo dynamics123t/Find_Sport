@@ -1,9 +1,7 @@
 import Dashboard from "@/components/DashboardAdmin/Dashboard";
-import UserContact from "@/components/DashboardAdmin/UserContact";
 import { getRequest } from "@/services/base/getRequest";
 import toast from "react-hot-toast";
 import React, { useEffect, useState } from "react";
-import ThreadContact from "@/components/DashboardAdmin/Thread/ThreadContact";
 interface IProps {
   id?: string;
   user_id?: string;
@@ -27,21 +25,45 @@ const contactuser = () => {
   return (
     <div>
       <Dashboard />
-      <ThreadContact />
-      {ListContact && ListContact.length > 0 ? (
-        ListContact.map((contact) => (
-          <UserContact
-            key={contact.id}
-            id={contact.id}
-            userid={contact.user_id}
-            content={contact.content}
-            created_at={contact.created_at}
-            onContact={getlistcontact}
-          />
-        ))
-      ) : (
-        <p>No contact available</p>
-      )}
+      <div className="relative overflow-x-auto">
+        <table className="w-[80%] ml-auto text-sm text-left text-gray-500 mt-8">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                Stt
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Id liên hệ
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Id người dùng
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Nội dung
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Thời gian tạo
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {ListContact.map((rowData, index) => (
+              <tr key={rowData.id} className="bg-white dark:bg-gray-800">
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                >
+                  {index + 1}
+                </th>
+                <td className="px-6 py-4">{rowData.id}</td>
+                <td className="px-6 py-4">{rowData.user_id}</td>
+                <td className="px-6 py-4">{rowData.content}</td>
+                <td className="px-6 py-4">{rowData.created_at}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

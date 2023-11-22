@@ -18,7 +18,15 @@ const Header = () => {
       </div>
 
       <div className="flex left-0 w-[55%] justify-end bg-[#56e07b] items-center text-[#2f285a] text-base font-bold pe-8 gap-8 rounded-br-full">
-        <div className="mr-auto w-[46%]"></div>
+        <div className="mr-auto w-[46%] pl-4">
+          <Image
+            className="cursor-pointer"
+            src="/images/logo_dau.png"
+            alt=""
+            width={300}
+            height={300}
+          />
+        </div>
         <Link href="/sports/bongda" className="cursor-pointer">
           BÓNG ĐÁ
         </Link>

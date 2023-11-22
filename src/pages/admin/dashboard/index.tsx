@@ -1,9 +1,7 @@
 import Dashboard from "@/components/DashboardAdmin/Dashboard";
-import UserManagement from "@/components/DashboardAdmin/UserManagement";
 import { getRequest } from "@/services/base/getRequest";
 import toast from "react-hot-toast";
 import React, { useEffect, useState } from "react";
-import ThreadUser from "@/components/DashboardAdmin/Thread/ThreadUser";
 interface IProps {
   id?: string;
   username?: string;
@@ -31,23 +29,53 @@ const dashboard = () => {
   return (
     <div>
       <Dashboard />
-      <ThreadUser />
-      {ListUser.length > 0 ? (
-        ListUser.map((user) => (
-          <UserManagement
-            key={user.id}
-            username={user.username}
-            phone={user.phone}
-            email={user.email}
-            address={user.address}
-            system_role={user.system_role}
-            created_at={user.created_at}
-            onAccepted={getlistuser}
-          />
-        ))
-      ) : (
-        <p>No users available</p>
-      )}
+      <div className="relative overflow-x-auto">
+        <table className="w-[80%] ml-auto text-sm text-left text-gray-500 mt-8">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                Stt
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Tên
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Số điện thoại
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Email
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Địa chỉ
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Quyền
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Thời gian tạo
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {ListUser.map((rowData, index) => (
+              <tr key={rowData.id} className="bg-white dark:bg-gray-800">
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                >
+                  {index + 1}
+                </th>
+                <td className="px-6 py-4">{rowData.username}</td>
+                <td className="px-6 py-4">{rowData.phone}</td>
+                <td className="px-6 py-4">{rowData.email}</td>
+                <td className="px-6 py-4">{rowData.address}</td>
+                <td className="px-6 py-4">{rowData.system_role}</td>
+                <td className="px-6 py-4">{rowData.created_at}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

@@ -126,6 +126,7 @@ const ProfileUser = () => {
           </div>
           <div className="text-center mt-2">
             <h2 className="font-semibold">{isNameUser?.username}</h2>
+            <p className="font-normal">Iduser của bạn: {isNameUser?.id}</p>
             <p className="text-gray-500">{isNameUser?.email}</p>
           </div>
           <ul className="py-4 mt-2 text-gray-700 flex items-center justify-around">

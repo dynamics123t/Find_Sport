@@ -3,15 +3,18 @@ import PopupMessage from "@/components/Popup/PopupMessage";
 import { getRequest } from "@/services/base/getRequest";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import viLocale from "date-fns/locale/vi";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import ButtonPicker from "@/components/Button/ButtonPicker";
 import PaginationCustom from "@/components/Pagination/Pagination";
+import { postRequest } from "@/services/base/postRequest";
+import Invoice from "@/components/Invoice/Invoice";
 interface IProps {
   id?: string;
   name?: string;
@@ -21,6 +24,18 @@ interface IProps {
   price?: string;
   img?: string;
   onAccepted: () => void;
+}
+interface CProps {
+  id?: string;
+  date_booking?: string;
+  payment_status?: string;
+  id_user?: string;
+  id_sport?: string;
+  time_booking?: string;
+  mode_of_payment?: string;
+  status?: string;
+  time_create?: string;
+  onView: () => void;
 }
 const pay = () => {
   const [selectedButtons, setSelectedButtons] = useState<string[]>([]);
@@ -33,7 +48,6 @@ const pay = () => {
     } else {
       setSelectedButtons((prevSelected) => [...prevSelected, label]);
     }
-    // setSelectedButton(label);
   };
   const buttonList = [
     "5:00 - 6:00",
@@ -57,7 +71,9 @@ const pay = () => {
   const [selected, setSelected] = useState<Date>();
   let footer = <p>Vui lòng chọn ngày</p>;
   if (selected) {
-    footer = <p>Bạn chọn {format(selected, "PP", { locale: viLocale })}.</p>;
+    footer = (
+      <p>Bạn chọn {format(selected, "yyyy-MM-dd", { locale: viLocale })}.</p>
+    );
   }
   const isPastDate = (date: any) => {
     const today = new Date();
@@ -71,9 +87,9 @@ const pay = () => {
     );
   };
   const [isPopup, setPopup] = useState(false);
+  const [isInvoice, setInvoice] = useState(false);
   const [isChangeText, setChangeText] = useState(false);
   const router = useRouter();
-  // const { id } = router.query;
   const [ListCard, setListCard] = useState<IProps>();
   useEffect(() => {
     const { id } = router.query;
@@ -83,13 +99,61 @@ const pay = () => {
   }, [router.query.id]);
   const getSport = async (id: any) => {
     try {
-      const data: any = await getRequest(`/sport/${id}`, {});
+      const data: any = await getRequest(`/sport/${id}`);
       console.log(data.data);
-
       setListCard(data.data);
     } catch (error) {
       console.log(error);
       toast.error("Server error!");
+    }
+  };
+  const searchParams = useSearchParams();
+  const [isBooking, setBooking] = useState<CProps[]>([]);
+  const [isTotalbooking, setTotalbooking] = useState<number>();
+  const page = Number(searchParams.get("page")) || 1;
+  useEffect(() => {
+    getBooking();
+  }, [page]);
+
+  const getBooking = async () => {
+    try {
+      const data: any = await getRequest(
+        `/booking?skip=${(page - 1) * 10}&limit=${10}`
+      );
+      console.log(data.data);
+
+      setBooking(data.data);
+      setTotalbooking(data.data);
+    } catch (error) {
+      toast.error("Server error!");
+    }
+  };
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  const handlePaymentMethodChange = (event: any) => {
+    setSelectedPaymentMethod(event.target.value);
+  };
+  const { id } = router.query;
+  if (!id) {
+    console.error("Tham số 'id' không tồn tại trong URL.");
+    return null;
+  }
+  console.log(id);
+  const handeleBooking = async () => {
+    try {
+      const data: any = await postRequest("/booking/create", {
+        id_sport: id,
+        time_booking: selectedButtons,
+        date_booking: format(selected as Date, "yyyy-MM-dd"),
+        mode_of_payment: selectedPaymentMethod,
+        payment_status: true,
+      });
+      setInvoice(true);
+      toast.success("Xuất hóa đơn thanh toán thành công!!");
+    } catch (error: any) {
+      console.log(error);
+      toast.error(
+        `Thanh toán không thành công : ${error.response?.data?.detail?.message}`
+      );
     }
   };
   return (
@@ -103,7 +167,15 @@ const pay = () => {
           <img src={ListCard?.img} className="w-[800px] h-[520px]" alt="" />
         </div>
       </PopupMessage>
-
+      <PopupMessage
+        maxWidth="max-w-[800px]"
+        isOpen={isInvoice}
+        onCLickOutSide={() => setInvoice(false)}
+      >
+        <div className="w-[700px]">
+          <Invoice />
+        </div>
+      </PopupMessage>
       <div className="w-full flex justify-center items-center">
         <div className="flex flex-col p-8">
           <div className="pb-8">
@@ -155,52 +227,60 @@ const pay = () => {
           <div className="w-full h-[50px] bg-[#ECECEC] justify-center items-center flex rounded-t-lg">
             <p className="font-semibold text-[16px]">SÂN ĐÃ THUÊ</p>
           </div>
-
-          <div className="p-6">
-            <div className="relative overflow-x-auto">
-              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      Tên sân
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Người thuê
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Ngày thuê
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Khung giờ thuê
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Thời gian còn lại
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-white dark:bg-gray-800">
+          <div className="relative overflow-x-auto">
+            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+                <tr>
+                  <th scope="col" className="px-6 py-3">
+                    id
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    id_user
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Ngày thuê
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Thời gian thuê
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Trạng thái thanh toán
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Trạng thái sân
+                  </th>
+                  <th scope="col" className="px-6 py-3">
+                    Thời gian đặt
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {isBooking.map((rowData, index) => (
+                  <tr key={rowData.id} className="bg-white dark:bg-gray-800">
                     <th
                       scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap "
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
-                      Magic Mouse 2
+                      {index + 1}
                     </th>
-                    <td className="px-6 py-4">Black</td>
-                    <td className="px-6 py-4">Accessories</td>
-                    <td className="px-6 py-4">$99</td>
+                    <td className="px-6 py-4">{rowData.id_user}</td>
+                    <td className="px-6 py-4">{rowData.date_booking}</td>
+                    <td className="px-6 py-4">{rowData.time_booking}</td>
+                    <td className="px-6 py-4">{rowData.mode_of_payment}</td>
+                    <td className="px-6 py-4">{rowData.status}</td>
+                    <td className="px-6 py-4">{rowData.time_create}</td>
                   </tr>
-                </tbody>
-              </table>
-              <div className="flex justify-center items-center">
-                <PaginationCustom
-                  handleChange={() => {}}
-                  page={1}
-                  total_record={1 || 0}
-                  record_per_page={10}
-                />
-              </div>
-            </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex justify-center items-center">
+            <PaginationCustom
+              handleChange={() => {}}
+              page={page}
+              total_record={isTotalbooking || 0}
+              record_per_page={10}
+            />
           </div>
         </div>
         <div className="w-[80%] flex flex-col border-2 rounded-lg">
@@ -246,11 +326,12 @@ const pay = () => {
             <div className="flex items-center justify-between">
               <div className="w-[48%] pl-3 flex items-center border border-gray-200 rounded ">
                 <input
-                  id="bordered-radio-1"
                   type="radio"
-                  value=""
+                  value="CASH"
                   name="bordered-radio"
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                  checked={selectedPaymentMethod === "CASH"}
+                  onChange={handlePaymentMethodChange}
                 />
                 <label className="w-full py-4 ml-2 text-sm font-medium text-gray-900 ">
                   Thanh toán bằng tiền mặt
@@ -258,11 +339,12 @@ const pay = () => {
               </div>
               <div className="w-[48%] px-3 flex items-center border border-gray-200 rounded ">
                 <input
-                  id="bordered-radio-2"
                   type="radio"
-                  value=""
+                  value="BANKING"
                   name="bordered-radio"
                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                  checked={selectedPaymentMethod === "BANKING"}
+                  onChange={handlePaymentMethodChange}
                 />
                 <label className="w-full py-4 ml-2 text-sm font-medium text-gray-900 ">
                   Thanh toán bằng chuyển khoản
@@ -272,11 +354,13 @@ const pay = () => {
           </div>
           <div className="p-6 flex justify-center items-center ">
             <button
-              // href={"/pay"}
-              //  type="button"
+              type="button"
+              onClick={() => {
+                handeleBooking(); // Gọi hành động handleBooking
+              }}
               className="w-[20%] justify-center items-center flex focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 "
             >
-              Thanh toán
+              Đặt sân
             </button>
           </div>
         </div>

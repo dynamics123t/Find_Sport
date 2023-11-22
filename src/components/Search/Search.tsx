@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import toast from "react-hot-toast";
-import { useSearchParams } from "next/navigation";
-import { getRequest } from "@/services/base/getRequest";
 import { useRouter } from "next/router";
 const Search = () => {
   const [Find, setFind] = useState("");

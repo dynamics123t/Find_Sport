@@ -41,7 +41,10 @@ const pay = () => {
   const [selectedButtons, setSelectedButtons] = useState<string[]>([]);
   const handleButtonClick = (label: string) => {
     const isSelected = selectedButtons.includes(label);
-    if (isSelected) {
+    const isAlreadyBooked = isBooking.some(
+      (booking) => booking.time_booking === label
+    );
+    if (isSelected || isAlreadyBooked) {
       setSelectedButtons((prevSelected) =>
         prevSelected.filter((selectedLabel) => selectedLabel !== label)
       );
@@ -113,19 +116,23 @@ const pay = () => {
   const page = Number(searchParams.get("page")) || 1;
   useEffect(() => {
     getBooking();
-  }, [page]);
+  }, [selected, page]);
 
   const getBooking = async () => {
     try {
       const data: any = await getRequest(
-        `/booking?skip=${(page - 1) * 10}&limit=${10}`
+        `/booking/sport?sport_id=${id}&date_booking=${format(
+          selected as Date,
+          "yyyy-MM-dd"
+        )}&skip=${(page - 1) * 10}&limit=${20}`
+        //    `/booking?skip=${(page - 1) * 10}&limit=${10}`
       );
       console.log(data.data);
 
       setBooking(data.data);
       setTotalbooking(data.data);
     } catch (error) {
-      toast.error("Server error!");
+      // toast.error("Server error!");
     }
   };
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
@@ -300,6 +307,9 @@ const pay = () => {
                 disabled={isPastDate}
                 footer={footer}
                 locale={viLocale}
+                onDayClick={() => {
+                  getBooking();
+                }}
               />
             </div>
 
@@ -313,6 +323,9 @@ const pay = () => {
                     key={index}
                     label={buttonLabel}
                     selected={selectedButtons.includes(buttonLabel)}
+                    disabled={isBooking.some(
+                      (booking) => booking.time_booking === buttonLabel
+                    )}
                     onClick={() => handleButtonClick(buttonLabel)}
                   />
                 ))}
@@ -356,7 +369,7 @@ const pay = () => {
             <button
               type="button"
               onClick={() => {
-                handeleBooking(); // Gọi hành động handleBooking
+                handeleBooking();
               }}
               className="w-[20%] justify-center items-center flex focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 "
             >

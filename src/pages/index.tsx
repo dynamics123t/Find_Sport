@@ -63,9 +63,27 @@ const Index = () => {
         </div>
       </div>
       <div className="flex justify-around my-16">
-        <CardRead />
-        <CardRead />
-        <CardRead />
+        <CardRead
+          img="/images/card_read1.jpg"
+          label="Chơi bóng đá sân 7 mặc dù có quy nhỏ hơn về số lượng cầu thủ cũng như kích thước sân thi đấu 11 người thông thường. Tuy nhiên, hình thức này lại mang đến những điều thú vị riêng. Với thông tin bài viết cập nhật ngay sau đây sẽ giúp bạn tìm hiểu chi tiết về sơ đồ chiến thuật bóng đá 7 người. Từ đó, áp dụng trong thi đấu để nâng cao tổ chức đội hình, dễ dàng đạt đến chiến thắng.
+          "
+          title="6 Sơ đồ, đội hình, chiến thuật bóng đá sân 7 hiệu quả nhất"
+          href="https://www.youtube.com/watch?v=XcSCeGdFYsA"
+        />
+        <CardRead
+          img="/images/card_read1.jpg"
+          label="Chơi bóng đá sân 7 mặc dù có quy nhỏ hơn về số lượng cầu thủ cũng như kích thước sân thi đấu 11 người thông thường. Tuy nhiên, hình thức này lại mang đến những điều thú vị riêng. Với thông tin bài viết cập nhật ngay sau đây sẽ giúp bạn tìm hiểu chi tiết về sơ đồ chiến thuật bóng đá 7 người. Từ đó, áp dụng trong thi đấu để nâng cao tổ chức đội hình, dễ dàng đạt đến chiến thắng.
+          "
+          title="6 Sơ đồ, đội hình, chiến thuật bóng đá sân 7 hiệu quả nhất"
+          href="https://www.youtube.com/watch?v=XcSCeGdFYsA"
+        />
+        <CardRead
+          img="/images/card_read1.jpg"
+          label="Chơi bóng đá sân 7 mặc dù có quy nhỏ hơn về số lượng cầu thủ cũng như kích thước sân thi đấu 11 người thông thường. Tuy nhiên, hình thức này lại mang đến những điều thú vị riêng. Với thông tin bài viết cập nhật ngay sau đây sẽ giúp bạn tìm hiểu chi tiết về sơ đồ chiến thuật bóng đá 7 người. Từ đó, áp dụng trong thi đấu để nâng cao tổ chức đội hình, dễ dàng đạt đến chiến thắng.
+          "
+          title="6 Sơ đồ, đội hình, chiến thuật bóng đá sân 7 hiệu quả nhất"
+          href="https://www.youtube.com/watch?v=XcSCeGdFYsA"
+        />
       </div>
     </div>
   );

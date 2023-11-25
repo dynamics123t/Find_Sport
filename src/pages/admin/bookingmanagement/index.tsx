@@ -1,9 +1,12 @@
 import Dashboard from "@/components/DashboardAdmin/Dashboard";
 import { getRequest } from "@/services/base/getRequest";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import React, { useEffect, useState } from "react";
 import PaginationCustom from "@/components/Pagination/Pagination";
+import PopupMessage from "@/components/Popup/PopupMessage";
+import StatusBooking from "@/components/Sport/StatusBooking";
 interface CProps {
   id?: string;
   date_booking?: string;
@@ -16,10 +19,12 @@ interface CProps {
   time_create?: string;
   onView: () => void;
 }
-const contactuser = () => {
+const bookingmanagement = () => {
   const searchParams = useSearchParams();
   const [isBooking, setBooking] = useState<CProps[]>([]);
   const [isTotalbooking, setTotalbooking] = useState<number>();
+  const [isPopup, setPopup] = useState(false);
+  const [isBookingid, setBookingid] = useState<CProps>();
   const page = Number(searchParams.get("page")) || 1;
   useEffect(() => {
     getBooking();
@@ -38,8 +43,27 @@ const contactuser = () => {
       toast.error("Server error!");
     }
   };
+  const getBookingid = async (id: string) => {
+    try {
+      const data: any = await getRequest(`/booking?booking_id=${id}`);
+      console.log(data.data);
+
+      setBookingid(data.data);
+    } catch (error) {
+      toast.error("Server error!");
+    }
+  };
   return (
     <div>
+      <PopupMessage
+        maxWidth="max-w-[700px]"
+        isOpen={isPopup}
+        onCLickOutSide={() => setPopup(false)}
+      >
+        <div className="w-[600px]">
+          <StatusBooking id={isBookingid?.id}></StatusBooking>
+        </div>
+      </PopupMessage>
       <Dashboard />
       <div className="relative overflow-x-auto">
         <table className="w-[80%] ml-auto text-sm text-left text-gray-500 mt-8">
@@ -66,6 +90,9 @@ const contactuser = () => {
               <th scope="col" className="px-6 py-3">
                 Thời gian đặt
               </th>
+              <th scope="col" className="px-6 py-3">
+                Status
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -83,6 +110,18 @@ const contactuser = () => {
                 <td className="px-6 py-4">{rowData.mode_of_payment}</td>
                 <td className="px-6 py-4">{rowData.status}</td>
                 <td className="px-6 py-4">{rowData.time_create}</td>
+                <td className="px-6 py-4">
+                  <a
+                    // id={id}
+                    onClick={() => {
+                      setPopup(true);
+                      rowData.id && getBookingid(rowData.id);
+                    }}
+                    className="font-medium text-blue-600 hover:cursor-pointer"
+                  >
+                    Edit
+                  </a>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -100,4 +139,4 @@ const contactuser = () => {
   );
 };
 
-export default contactuser;
+export default bookingmanagement;

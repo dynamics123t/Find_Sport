@@ -16,17 +16,29 @@ interface IProps {
   img?: string;
   onAccepted: () => void;
 }
+interface UProps {
+  id?: string;
+  username?: string;
+  email?: string;
+  phone?: string;
+  avatar?: string;
+  birthday?: string;
+  address?: string;
+  onView: () => void;
+}
 const index = ({ id }: IProps) => {
   const router = useRouter();
   // const { id } = router.query;
   const [isPopup, setPopup] = useState(false);
   const [isChangeText, setChangeText] = useState(false);
   const [ListCard, setListCard] = useState<IProps>();
+  const [isNameUser, setNameUser] = useState<UProps>();
   useEffect(() => {
     const { id } = router.query;
     if (id) {
       getSport(id);
     }
+    getnameuser();
   }, [router.query.id]);
   const getSport = async (id: any) => {
     try {
@@ -36,6 +48,14 @@ const index = ({ id }: IProps) => {
       setListCard(data.data);
     } catch (error) {
       console.log(error);
+      toast.error("Server error!");
+    }
+  };
+  const getnameuser = async () => {
+    try {
+      const data = (await getRequest("/user/me")) as any;
+      setNameUser(data.data);
+    } catch (error) {
       toast.error("Server error!");
     }
   };
@@ -220,7 +240,7 @@ const index = ({ id }: IProps) => {
             <div className="flex flex-col">
               <div className="flex justify-center items-center">
                 <div className="ml-2 bg-[#53d882] px-2 py-1 rounded-2xl">
-                  <span className="font-semibold">Nguyen Duy Tan</span>
+                  <span className="font-semibold">{isNameUser?.username}</span>
                   <div>Sân uy tín, đẹp, giá cả rẻ như cho</div>
                 </div>
                 <div className="p-1 ml-3 cursor-pointer hover:bg-slate-200 rounded-full">

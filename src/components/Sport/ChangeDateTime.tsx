@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";
 import { format, parse } from "date-fns";
 import viLocale from "date-fns/locale/vi";
 import { putRequest } from "@/services/base/putRequest";
+import { useSearchParams } from "next/navigation";
 import ButtonPicker from "../Button/ButtonPicker";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import { getRequest } from "@/services/base/getRequest";
 interface CProps {
   id?: string;
   date_booking?: string;
@@ -23,7 +25,10 @@ const StatusBooking = ({ id, id_sport }: CProps) => {
   const router = useRouter();
   const handleButtonClick = (label: string) => {
     const isSelected = selectedButtons.includes(label);
-    if (isSelected) {
+    const isAlreadyBooked = isBooking.some(
+      (booking) => booking.time_booking === label
+    );
+    if (isSelected || isAlreadyBooked) {
       setSelectedButtons((prevSelected) =>
         prevSelected.filter((selectedLabel) => selectedLabel !== label)
       );
@@ -73,6 +78,30 @@ const StatusBooking = ({ id, id_sport }: CProps) => {
     );
   };
   const route = useRouter();
+  useEffect(() => {
+    getBooking();
+  }, [selected]);
+
+  const searchParams = useSearchParams();
+  const [isBooking, setBooking] = useState<CProps[]>([]);
+  const [isTotalbooking, setTotalbooking] = useState<number>();
+  const page = Number(searchParams.get("page")) || 1;
+  const getBooking = async () => {
+    try {
+      const data: any = await getRequest(
+        `/booking/sport?sport_id=${id_sport}&date_booking=${format(
+          selected as Date,
+          "yyyy-MM-dd"
+        )}&skip=${(page - 1) * 10}&limit=${20}`
+      );
+      console.log(data.data);
+
+      setBooking(data.data);
+      setTotalbooking(data.data);
+    } catch (error) {
+      // toast.error("Server error!");
+    }
+  };
   const handeleBooking = async () => {
     if (!id || !id_sport) {
       console.error("Giá trị id hoặc id_sport không được định nghĩa.");
@@ -113,6 +142,9 @@ const StatusBooking = ({ id, id_sport }: CProps) => {
               disabled={isPastDate}
               footer={footer}
               locale={viLocale}
+              onDayClick={() => {
+                getBooking();
+              }}
             />
           </div>
 
@@ -126,6 +158,9 @@ const StatusBooking = ({ id, id_sport }: CProps) => {
                   key={index}
                   label={buttonLabel}
                   selected={selectedButtons.includes(buttonLabel)}
+                  disabled={isBooking.some(
+                    (booking) => booking.time_booking === buttonLabel
+                  )}
                   onClick={() => handleButtonClick(buttonLabel)}
                 />
               ))}

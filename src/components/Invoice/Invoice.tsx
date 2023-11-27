@@ -92,7 +92,7 @@ const Invoice = () => {
       const data: any = await getRequest(
         `/booking?booking_id=${isBooking?.id}`
       );
-      console.log(data.data);
+      // console.log(data.data);
 
       setBooking(data.data);
       setTotalbooking(data.data);

@@ -2,6 +2,7 @@ import Dashboard from "@/components/DashboardAdmin/Dashboard";
 import { getRequest } from "@/services/base/getRequest";
 import toast from "react-hot-toast";
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 interface IProps {
   id?: string;
   username?: string;
@@ -70,7 +71,10 @@ const dashboard = () => {
                 <td className="px-6 py-4">{rowData.email}</td>
                 <td className="px-6 py-4">{rowData.address}</td>
                 <td className="px-6 py-4">{rowData.system_role}</td>
-                <td className="px-6 py-4">{rowData.created_at}</td>
+                <td className="px-6 py-4">
+                  {" "}
+                  {moment(rowData?.created_at).format("MMMM Do YYYY, h:mm:ss")}
+                </td>
               </tr>
             ))}
           </tbody>

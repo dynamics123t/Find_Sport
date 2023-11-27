@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import PaginationCustom from "@/components/Pagination/Pagination";
 import PopupMessage from "@/components/Popup/PopupMessage";
 import StatusBooking from "@/components/Sport/StatusBooking";
+import moment from "moment";
 interface CProps {
   id?: string;
   date_booking?: string;
@@ -109,7 +110,9 @@ const bookingmanagement = () => {
                 <td className="px-6 py-4">{rowData.time_booking}</td>
                 <td className="px-6 py-4">{rowData.mode_of_payment}</td>
                 <td className="px-6 py-4">{rowData.status}</td>
-                <td className="px-6 py-4">{rowData.time_create}</td>
+                <td className="px-6 py-4">
+                  {moment(rowData?.time_create).fromNow()}
+                </td>
                 <td className="px-6 py-4">
                   <a
                     // id={id}

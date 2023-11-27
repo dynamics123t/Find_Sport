@@ -2,6 +2,7 @@ import Dashboard from "@/components/DashboardAdmin/Dashboard";
 import { getRequest } from "@/services/base/getRequest";
 import toast from "react-hot-toast";
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 interface IProps {
   id?: string;
   user_id?: string;
@@ -58,7 +59,9 @@ const contactuser = () => {
                 <td className="px-6 py-4">{rowData.id}</td>
                 <td className="px-6 py-4">{rowData.user_id}</td>
                 <td className="px-6 py-4">{rowData.content}</td>
-                <td className="px-6 py-4">{rowData.created_at}</td>
+                <td className="px-6 py-4">
+                  {moment(rowData?.created_at).format("MMMM Do YYYY, h:mm:ss")}
+                </td>
               </tr>
             ))}
           </tbody>

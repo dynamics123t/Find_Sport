@@ -8,18 +8,25 @@ import { postRequest } from "@/services/base/postRequest";
 import { getRequest } from "@/services/base/getRequest";
 interface IdProps {
   id?: string;
+  name?: string;
+  address?: string;
+  phone?: string;
+  description?: string;
+  price?: string;
+  img?: string;
+  onAccepted?: () => void;
 }
 const UpdateSport = ({ id }: IdProps) => {
   const [file, setImage] = useState<File | null>(null);
   const router = useRouter();
   const [dataImage, setDataImage] = useState<string>("");
-  const [initialData, setInitialData] = useState<any>(null);
+  const [initialData, setInitialData] = useState<IdProps>({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedData = await getRequest(`/sport/${id}`);
-        setInitialData(fetchedData);
+        const fetchedData: any = await getRequest(`/sport/${id}`);
+        setInitialData(fetchedData.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -49,12 +56,12 @@ const UpdateSport = ({ id }: IdProps) => {
 
   const formik = useFormik({
     initialValues: {
-      name: initialData?.name || "",
-      address: initialData?.address || "",
-      price: initialData?.price || "",
-      description: initialData?.description || "",
-      phone: initialData?.phone || "",
-      img: initialData?.img || "",
+      name: "",
+      address: "",
+      price: "",
+      description: "",
+      phone: "",
+      img: "",
     },
 
     validationSchema: SCHEMA_UPDATE_SPORT,
@@ -95,7 +102,7 @@ const UpdateSport = ({ id }: IdProps) => {
               <input
                 name="name"
                 type="text"
-                value={formik.values.name}
+                value={formik.values.name || initialData.name}
                 onChange={formik.handleChange}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Tên sân"
@@ -106,7 +113,7 @@ const UpdateSport = ({ id }: IdProps) => {
               <input
                 name="address"
                 type="text"
-                value={formik.values.address}
+                value={formik.values.address || initialData.address}
                 onChange={formik.handleChange}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Địa chỉ"
@@ -117,7 +124,7 @@ const UpdateSport = ({ id }: IdProps) => {
               <input
                 name="price"
                 type="number"
-                value={formik.values.price}
+                value={formik.values.price || initialData.price}
                 onChange={formik.handleChange}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Giá tham khảo"
@@ -128,7 +135,7 @@ const UpdateSport = ({ id }: IdProps) => {
               <input
                 name="description"
                 type="text"
-                value={formik.values.description}
+                value={formik.values.description || initialData.description}
                 onChange={formik.handleChange}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Chi tiết"
@@ -138,8 +145,8 @@ const UpdateSport = ({ id }: IdProps) => {
               <p className="font-medium text-slate-700 pb-2">Số điện thoại</p>
               <input
                 name="phone"
-                type="tel"
-                value={formik.values.phone}
+                type="number"
+                value={formik.values.phone || initialData?.phone}
                 onChange={formik.handleChange}
                 className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                 placeholder="Số điện thoại chủ sân"

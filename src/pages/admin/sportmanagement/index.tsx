@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import ThreadSport from "@/components/DashboardAdmin/Thread/ThreadSport";
 import PaginationCustom from "@/components/Pagination/Pagination";
+import moment from "moment";
 interface IProps {
   id?: string;
   img?: string;
@@ -57,7 +58,7 @@ const sportmanagement = () => {
             phone={sport.phone}
             address={sport.address}
             description={sport.description}
-            created_at={sport.created_at}
+            created_at={moment(sport?.created_at).fromNow()}
             onView={getlistsport}
             onLoad={load}
           />

@@ -15,6 +15,7 @@ import ButtonPicker from "@/components/Button/ButtonPicker";
 import PaginationCustom from "@/components/Pagination/Pagination";
 import { postRequest } from "@/services/base/postRequest";
 import Invoice from "@/components/Invoice/Invoice";
+import moment from "moment";
 interface IProps {
   id?: string;
   name?: string;
@@ -187,12 +188,12 @@ const pay = () => {
         <div className="flex flex-col p-8">
           <div className="pb-8">
             <Heading
-              title="Thanh Toán"
+              title="Đặt sân"
               pageNames={[
                 "Trang chủ",
                 "Sân bóng đá",
-                "Sân chuyên việt",
-                "Thanh toán",
+                ListCard?.name || "Default Title",
+                "Đặt sân",
               ]}
             />
             <img
@@ -211,7 +212,7 @@ const pay = () => {
               <p className="font-semibold text-[16px]">ĐỊA CHỈ</p>
             </div>
             <div className="flex flex-col p-4">
-              <p>Số 98 Tiểu La, Hòa Thuận Đông, Hải Châu, Đà Nẵng, Việt Nam</p>
+              <p>{ListCard?.address}</p>
               <Link
                 href="https://www.google.com/maps/d/u/0/viewer?mid=1joN4LtBZ6uaUSlv0fTpGFr8bTOuBgm4&femb=1&ll=16.07053076103764%2C108.20902574218752&z=12"
                 target="_blank"
@@ -251,10 +252,10 @@ const pay = () => {
                     Thời gian thuê
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Trạng thái thanh toán
+                    Hình thức thanh toán
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Trạng thái sân
+                    Trạng thái
                   </th>
                   <th scope="col" className="px-6 py-3">
                     Thời gian đặt
@@ -275,19 +276,14 @@ const pay = () => {
                     <td className="px-6 py-4">{rowData.time_booking}</td>
                     <td className="px-6 py-4">{rowData.mode_of_payment}</td>
                     <td className="px-6 py-4">{rowData.status}</td>
-                    <td className="px-6 py-4">{rowData.time_create}</td>
+
+                    <td className="px-6 py-4">
+                      {moment(rowData?.time_create).calendar()}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-          <div className="flex justify-center items-center">
-            <PaginationCustom
-              handleChange={() => {}}
-              page={page}
-              total_record={isTotalbooking || 0}
-              record_per_page={10}
-            />
           </div>
         </div>
         <div className="w-[80%] flex flex-col border-2 rounded-lg">

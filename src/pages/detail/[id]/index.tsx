@@ -6,6 +6,11 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import DropdownComment from "@/components/Comment/DropdownComment";
+import { SCHEMA_COMMENT } from "@/utils/constants/schema";
+import { useFormik } from "formik";
+import { postRequest } from "@/services/base/postRequest";
+import moment from "moment";
 interface IProps {
   id?: string;
   name?: string;
@@ -26,13 +31,31 @@ interface UProps {
   address?: string;
   onView: () => void;
 }
-const index = ({ id }: IProps) => {
+
+interface ZProps {
+  id?: string;
+  id_sport?: string;
+  user?: {
+    avatar?: string;
+    id?: string;
+    username?: string;
+  };
+  content?: string;
+  image?: string;
+  time_create?: string;
+  onComment: () => void;
+}
+const index = () => {
   const router = useRouter();
-  // const { id } = router.query;
+  const [isIdComment, setIdComment] = useState<ZProps | undefined>(undefined);
   const [isPopup, setPopup] = useState(false);
   const [isChangeText, setChangeText] = useState(false);
   const [ListCard, setListCard] = useState<IProps>();
   const [isNameUser, setNameUser] = useState<UProps>();
+  const [isComment, setComment] = useState<ZProps[]>([]);
+  const [Load, setLoad] = useState<boolean>(false);
+  const [LoadLoadCreateComment, setLoadCreateComment] =
+    useState<boolean>(false);
   useEffect(() => {
     const { id } = router.query;
     if (id) {
@@ -42,7 +65,7 @@ const index = ({ id }: IProps) => {
   }, [router.query.id]);
   const getSport = async (id: any) => {
     try {
-      const data: any = await getRequest(`/sport/${id}`, {});
+      const data: any = await getRequest(`/sport/${id}`);
       console.log(data.data);
 
       setListCard(data.data);
@@ -59,6 +82,49 @@ const index = ({ id }: IProps) => {
       toast.error("Server error!");
     }
   };
+  useEffect(() => {
+    const { id } = router.query;
+    if (id) {
+      getComment(id);
+    }
+  }, [Load, LoadLoadCreateComment, router.query.id]);
+  const getComment = async (id: any) => {
+    try {
+      const data: any = await getRequest(`/comment/${id}?skip=0&limit=10`);
+      console.log(data.data);
+      setComment(data.data);
+    } catch (error) {
+      console.log(error);
+      toast.error("Server error!");
+    }
+  };
+  const load = () => {
+    setLoad(!Load);
+  };
+  const formik = useFormik({
+    initialValues: {
+      comment: "",
+    },
+    validationSchema: SCHEMA_COMMENT,
+
+    onSubmit: async ({ comment }) => {
+      try {
+        await postRequest("/comment/create", {
+          id_sport: router.query.id,
+          content: comment,
+          id_user: isNameUser?.id,
+        });
+        setLoadCreateComment(!LoadLoadCreateComment);
+        toast.success("Bình luận thành công!!!");
+      } catch (error: any) {
+        if (error.response?.data?.statusCode === 404) {
+          toast.error("This is an error!");
+        } else {
+          toast.error("serverError");
+        }
+      }
+    },
+  });
   return (
     <div className="w-full h-full">
       <PopupMessage
@@ -75,12 +141,16 @@ const index = ({ id }: IProps) => {
           <div className="pb-8">
             <Heading
               title={ListCard?.name || "Default Title"}
-              pageNames={["Trang chủ", "Sân bóng đá", "Sân chuyên việt"]}
+              pageNames={[
+                "Trang chủ",
+                "Sân bóng đá",
+                ListCard?.name || "Default Title",
+              ]}
             />
             <img
               onClick={() => setPopup(true)}
               src={ListCard?.img ?? ""}
-              key={ListCard?.img} // Thêm key vào đây
+              key={ListCard?.img}
               className="w-[800px] h-[520px]"
               alt=""
             />
@@ -112,7 +182,7 @@ const index = ({ id }: IProps) => {
               <p className="font-semibold text-[16px]">ĐỊA CHỈ</p>
             </div>
             <div className="flex flex-col p-4">
-              <p>Số 98 Tiểu La, Hòa Thuận Đông, Hải Châu, Đà Nẵng, Việt Nam</p>
+              <p>{ListCard?.address}</p>
               <Link
                 href="https://www.google.com/maps/d/u/0/viewer?mid=1joN4LtBZ6uaUSlv0fTpGFr8bTOuBgm4&femb=1&ll=16.07053076103764%2C108.20902574218752&z=12"
                 target="_blank"
@@ -209,19 +279,20 @@ const index = ({ id }: IProps) => {
       </div>
 
       <div className="w-full flex flex-col justify-center items-center">
-        <p className="">Bình luận</p>
+        <p className="font-bold">Bình luận</p>
         <div className="w-[80%]">
-          <form className="mb-6">
+          <form className="mb-6" onSubmit={formik.handleSubmit}>
             <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
               <label htmlFor="comment" className="sr-only">
                 Nhập bình luận
               </label>
               <textarea
-                id="comment"
-                rows={6}
-                className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
-                placeholder="Nhập bình luận..."
-                required
+                name="comment"
+                value={formik.values.comment}
+                onChange={formik.handleChange}
+                rows={4}
+                placeholder="Viết bình luận"
+                className="block w-full mb-4 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               ></textarea>
             </div>
             <button
@@ -231,42 +302,45 @@ const index = ({ id }: IProps) => {
               Gửi bình luận
             </button>
           </form>
-          <div className="flex">
-            <img
-              className="w-10 h-10 rounded-full"
-              src="/images/sanphui1.png"
-              alt="Rounded avatar"
-            />
-            <div className="flex flex-col">
-              <div className="flex justify-center items-center">
-                <div className="ml-2 bg-[#53d882] px-2 py-1 rounded-2xl">
-                  <span className="font-semibold">{isNameUser?.username}</span>
-                  <div>Sân uy tín, đẹp, giá cả rẻ như cho</div>
+          {isComment.map((item, index) => (
+            <div key={index} className="flex">
+              <img
+                className="w-10 h-10 rounded-full"
+                src={item?.user?.avatar}
+                alt="Rounded avatar"
+              />
+              <div className="flex flex-col">
+                <div className="flex justify-center items-center">
+                  <div className="ml-2 bg-[#53d882] px-2 py-1 rounded-2xl">
+                    <span className="font-semibold">
+                      {item?.user?.username}
+                    </span>
+                    <div>{item?.content}</div>
+                  </div>
+                  <div className="p-1 ml-3 cursor-pointer hover:bg-slate-200 rounded-full">
+                    <DropdownComment
+                      id={item?.id}
+                      onLoad={load}
+                    ></DropdownComment>
+                  </div>
                 </div>
-                <div className="p-1 ml-3 cursor-pointer hover:bg-slate-200 rounded-full">
-                  <Image
-                    className="cursor-pointer"
-                    src="/images/dot.png"
-                    alt=""
-                    width={24}
-                    height={24}
-                  />
-                </div>
-              </div>
 
-              <div>
-                <div className="flex ml-6">
-                  <div className="mr-3 font-medium cursor-pointer hover:underline">
-                    Like
+                <div>
+                  <div className="flex ml-6">
+                    <div className="mr-3 font-medium cursor-pointer hover:underline">
+                      Like
+                    </div>
+                    <div className="mr-3 font-medium cursor-pointer hover:underline">
+                      Phản hồi
+                    </div>
+                    <div className="font-light">
+                      {moment(item?.time_create).fromNow()}
+                    </div>
                   </div>
-                  <div className="mr-3 font-medium cursor-pointer hover:underline">
-                    Phản hồi
-                  </div>
-                  <div className="font-light">30 phút trước</div>
                 </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

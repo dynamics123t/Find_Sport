@@ -95,3 +95,7 @@ export const SCHEMA_FORGET_PASSWORD = yup.object({
 export const SCHEMA_CONTACT = yup.object({
   content: yup.string().required(fieldRequired).trim(),
 });
+
+export const SCHEMA_COMMENT = yup.object({
+  comment: yup.string().required(fieldRequired).trim(),
+});

@@ -7,6 +7,7 @@ import PaginationCustom from "@/components/Pagination/Pagination";
 import PopupMessage from "@/components/Popup/PopupMessage";
 import Invoice from "@/components/Invoice/Invoice";
 import ChangeDateTime from "@/components/Sport/ChangeDateTime";
+import moment from "moment";
 interface CProps {
   id?: string;
   date_booking?: string;
@@ -119,7 +120,9 @@ const history = () => {
                 <td className="px-6 py-4">{rowData.time_booking}</td>
                 <td className="px-6 py-4">{rowData.mode_of_payment}</td>
                 <td className="px-6 py-4">{rowData.status}</td>
-                <td className="px-6 py-4">{rowData.time_create}</td>
+                <td className="px-6 py-4">
+                  {moment(rowData?.time_create).calendar()}
+                </td>
                 <td className="px-6 py-4 flex justify-between items-center">
                   <a
                     onClick={() => {

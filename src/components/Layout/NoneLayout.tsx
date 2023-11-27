@@ -3,6 +3,8 @@ import { toast } from "react-hot-toast";
 import { RootState } from "@/redux/store";
 import { useLayoutEffect } from "react";
 import { getCookie } from "@/utils/clientCookie";
+import "moment/locale/vi";
+import moment from "moment";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/settings/constants";
 import { getRequest } from "@/services/base/getRequest";
 import { updateUser } from "@/redux/user/userSlice";
@@ -27,7 +29,7 @@ export default function NoneLayout({ children }: any) {
       }
     })();
   }, [pathname, currentUser]);
-
+  moment.locale("vi");
   const getMe = async () => {
     try {
       const data: any = await getRequest("/user/me");

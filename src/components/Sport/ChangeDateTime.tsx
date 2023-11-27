@@ -20,7 +20,7 @@ interface CProps {
   status?: string;
   time_create?: string;
 }
-const StatusBooking = ({ id, id_sport }: CProps) => {
+const ChangeDatetime = ({ id, id_sport }: CProps) => {
   const [selectedButtons, setSelectedButtons] = useState<string[]>([]);
   const router = useRouter();
   const handleButtonClick = (label: string) => {
@@ -183,4 +183,4 @@ const StatusBooking = ({ id, id_sport }: CProps) => {
   );
 };
 
-export default StatusBooking;
+export default ChangeDatetime;

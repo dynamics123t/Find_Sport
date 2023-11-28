@@ -99,3 +99,6 @@ export const SCHEMA_CONTACT = yup.object({
 export const SCHEMA_COMMENT = yup.object({
   comment: yup.string().required(fieldRequired).trim(),
 });
+export const SCHEMA_RECOMMENT = yup.object({
+  recomment: yup.string().required(fieldRequired).trim(),
+});

@@ -7,10 +7,11 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import DropdownComment from "@/components/Comment/DropdownComment";
-import { SCHEMA_COMMENT } from "@/utils/constants/schema";
+import { SCHEMA_COMMENT, SCHEMA_RECOMMENT } from "@/utils/constants/schema";
 import { useFormik } from "formik";
 import { postRequest } from "@/services/base/postRequest";
 import moment from "moment";
+import DropdownRecomment from "@/components/ReComment/DropdownRecomment";
 interface IProps {
   id?: string;
   name?: string;
@@ -45,17 +46,36 @@ interface ZProps {
   time_create?: string;
   onComment: () => void;
 }
+
+interface ReCmtProps {
+  id?: string;
+  user?: {
+    avatar?: string;
+    id?: string;
+    username?: string;
+  };
+  id_cmt?: string;
+  content?: string;
+  image?: string;
+  time_create?: string;
+  onRecomment: () => void;
+}
+
 const index = () => {
   const router = useRouter();
-  const [isIdComment, setIdComment] = useState<ZProps | undefined>(undefined);
   const [isPopup, setPopup] = useState(false);
   const [isChangeText, setChangeText] = useState(false);
   const [ListCard, setListCard] = useState<IProps>();
   const [isNameUser, setNameUser] = useState<UProps>();
   const [isComment, setComment] = useState<ZProps[]>([]);
+  const [isReComment, setReComment] = useState<ReCmtProps[]>([]);
   const [Load, setLoad] = useState<boolean>(false);
   const [LoadLoadCreateComment, setLoadCreateComment] =
     useState<boolean>(false);
+  const [FormRecomment, setFormRecomment] = useState(false);
+  const [selectedCommentId, setSelectedCommentId] = useState<string | null>(
+    null
+  );
   useEffect(() => {
     const { id } = router.query;
     if (id) {
@@ -98,6 +118,22 @@ const index = () => {
       toast.error("Server error!");
     }
   };
+  useEffect(() => {
+    if (isComment.length > 0) {
+      const idComment = isComment[0].id;
+      getRecomment(idComment);
+    }
+  }, [isComment]);
+  const getRecomment = async (id: any) => {
+    try {
+      const data: any = await getRequest(`/recomment/${id}?skip=0&limit=10`);
+      console.log(data.data);
+      setReComment(data.data[0]);
+    } catch (error) {
+      console.log(error);
+      toast.error("Server error!");
+    }
+  };
   const load = () => {
     setLoad(!Load);
   };
@@ -115,7 +151,39 @@ const index = () => {
           id_user: isNameUser?.id,
         });
         setLoadCreateComment(!LoadLoadCreateComment);
+        formik.resetForm();
         toast.success("Bình luận thành công!!!");
+      } catch (error: any) {
+        if (error.response?.data?.statusCode === 404) {
+          toast.error("This is an error!");
+        } else {
+          toast.error("serverError");
+        }
+      }
+    },
+  });
+  const Reformik = useFormik({
+    initialValues: {
+      recomment: "",
+    },
+    validationSchema: SCHEMA_RECOMMENT,
+
+    onSubmit: async ({ recomment }) => {
+      try {
+        const idCmt = isComment.length > 0 ? isComment[0].id : null;
+        if (idCmt) {
+          await postRequest("/recomment/create", {
+            id_cmt: idCmt,
+            content: recomment,
+            id_user: isNameUser?.id,
+          });
+          setLoadCreateComment(!LoadLoadCreateComment);
+          formik.resetForm();
+          setFormRecomment(!FormRecomment);
+          toast.success("Trả lời bình luận thành công!!!");
+        } else {
+          toast.error("No comment id available");
+        }
       } catch (error: any) {
         if (error.response?.data?.statusCode === 404) {
           toast.error("This is an error!");
@@ -324,20 +392,82 @@ const index = () => {
                     ></DropdownComment>
                   </div>
                 </div>
-
                 <div>
                   <div className="flex ml-6">
                     <div className="mr-3 font-medium cursor-pointer hover:underline">
                       Like
                     </div>
-                    <div className="mr-3 font-medium cursor-pointer hover:underline">
+                    <div
+                      onClick={() => {
+                        setFormRecomment(!FormRecomment);
+                        setSelectedCommentId(item.id || null);
+                      }}
+                      className="mr-3 font-medium cursor-pointer hover:underline"
+                    >
                       Phản hồi
                     </div>
+
                     <div className="font-light">
                       {moment(item?.time_create).fromNow()}
                     </div>
                   </div>
                 </div>
+                {isReComment.map((item, index) => (
+                  <div key={index} className="flex">
+                    <img
+                      className="w-10 h-10 rounded-full"
+                      src={item?.user?.avatar}
+                      alt=""
+                    />
+                    <div className="flex flex-col">
+                      <div className="flex justify-center items-center">
+                        <div className="ml-2 bg-[#53d882] px-2 py-1 rounded-2xl">
+                          <span className="font-semibold">
+                            {item?.user?.username}
+                          </span>
+                          <div>{item?.content}</div>
+                        </div>
+                        <div className="p-1 ml-3 cursor-pointer hover:bg-slate-200 rounded-full">
+                          <DropdownRecomment
+                            id={item?.id}
+                            onLoad={load}
+                          ></DropdownRecomment>
+                        </div>
+                      </div>
+                      <div>
+                        <div className="flex ml-6">
+                          <div className="mr-3 font-medium cursor-pointer hover:underline">
+                            Like
+                          </div>
+                          <div className="font-light">
+                            {moment(item?.time_create).fromNow()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {FormRecomment && selectedCommentId === item?.id && (
+                  <form className="mb-6" onSubmit={Reformik.handleSubmit}>
+                    <label htmlFor="recomment" className="sr-only">
+                      Nhập bình luận
+                    </label>
+                    <textarea
+                      name="recomment"
+                      value={Reformik.values.recomment}
+                      onChange={Reformik.handleChange}
+                      rows={2}
+                      placeholder="Viết bình luận"
+                      className="block w-full mb-4 rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    ></textarea>
+                    <button
+                      type="submit"
+                      className="bg-[#53d882] hover:bg-[#8debad] text-white font-bold py-2 px-4 rounded"
+                    >
+                      Gửi bình luận
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
           ))}

@@ -2,9 +2,9 @@ import useClickOutSide from "@/utils/hook/useClickOutSide";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import PopupMessage from "../Popup/PopupMessage";
-import UpdateComment from "./UpdateComment";
 import { toast } from "react-hot-toast";
 import { deleteRequest } from "@/services/base/deleteRequest";
+import UpdateRecomment from "./UpdateRecomment";
 interface ZProps {
   id?: string;
   id_sport?: string;
@@ -18,7 +18,7 @@ interface ZProps {
   time_create?: string;
   onLoad: () => void;
 }
-const DropdownComment = ({ id, onLoad }: ZProps) => {
+const DropdownRecomment = ({ id, onLoad }: ZProps) => {
   const [isDropDown, setDropDown] = useState(false);
   const [isComment, setComment] = useState<ZProps[]>([]);
 
@@ -32,7 +32,7 @@ const DropdownComment = ({ id, onLoad }: ZProps) => {
   );
   const handleCancel = async () => {
     try {
-      const data = await deleteRequest(`/comment/${id}`, {
+      const data = await deleteRequest(`/recomment/${id}`, {
         id: id,
       });
       onLoad();
@@ -50,7 +50,7 @@ const DropdownComment = ({ id, onLoad }: ZProps) => {
         onCLickOutSide={() => setPopupU(false)}
       >
         <div className="w-[600px]">
-          <UpdateComment id={id} onComment={() => {}} />
+          <UpdateRecomment id={id} onComment={() => {}} />
         </div>
       </PopupMessage>
       <button
@@ -101,4 +101,4 @@ const DropdownComment = ({ id, onLoad }: ZProps) => {
   );
 };
 
-export default DropdownComment;
+export default DropdownRecomment;

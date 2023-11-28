@@ -17,7 +17,7 @@ interface ZProps {
   time_create?: string;
   onComment: () => void;
 }
-const UpdateSport = ({ id, onComment }: ZProps) => {
+const UpdateRecomment = ({ id, onComment }: ZProps) => {
   const router = useRouter();
 
   const formik = useFormik({
@@ -28,7 +28,7 @@ const UpdateSport = ({ id, onComment }: ZProps) => {
 
     onSubmit: async ({ comment }) => {
       try {
-        await putRequest("/comment/update", {
+        await putRequest("/recomment/update", {
           id: id,
           content: comment,
         });
@@ -75,4 +75,4 @@ const UpdateSport = ({ id, onComment }: ZProps) => {
   );
 };
 
-export default UpdateSport;
+export default UpdateRecomment;

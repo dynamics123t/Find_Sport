@@ -395,7 +395,7 @@ const index = () => {
                 <div>
                   <div className="flex ml-6">
                     <div className="mr-3 font-medium cursor-pointer hover:underline">
-                      Like
+                      Thích
                     </div>
                     <div
                       onClick={() => {
@@ -412,41 +412,43 @@ const index = () => {
                     </div>
                   </div>
                 </div>
-                {isReComment.map((item, index) => (
-                  <div key={index} className="flex">
-                    <img
-                      className="w-10 h-10 rounded-full"
-                      src={item?.user?.avatar}
-                      alt=""
-                    />
-                    <div className="flex flex-col">
-                      <div className="flex justify-center items-center">
-                        <div className="ml-2 bg-[#53d882] px-2 py-1 rounded-2xl">
-                          <span className="font-semibold">
-                            {item?.user?.username}
-                          </span>
-                          <div>{item?.content}</div>
-                        </div>
-                        <div className="p-1 ml-3 cursor-pointer hover:bg-slate-200 rounded-full">
-                          <DropdownRecomment
-                            id={item?.id}
-                            onLoad={load}
-                          ></DropdownRecomment>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex ml-6">
-                          <div className="mr-3 font-medium cursor-pointer hover:underline">
-                            Like
+                {isReComment
+                  .filter((recommentItem) => recommentItem?.id_cmt === item?.id)
+                  .map((item, index) => (
+                    <div key={index} className="flex">
+                      <img
+                        className="w-10 h-10 rounded-full"
+                        src={item?.user?.avatar}
+                        alt=""
+                      />
+                      <div className="flex flex-col">
+                        <div className="flex justify-center items-center">
+                          <div className="ml-2 bg-[#53d882] px-2 py-1 rounded-2xl">
+                            <span className="font-semibold">
+                              {item?.user?.username}
+                            </span>
+                            <div>{item?.content}</div>
                           </div>
-                          <div className="font-light">
-                            {moment(item?.time_create).fromNow()}
+                          <div className="p-1 ml-3 cursor-pointer hover:bg-slate-200 rounded-full">
+                            <DropdownRecomment
+                              id={item?.id}
+                              onLoad={load}
+                            ></DropdownRecomment>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex ml-6">
+                            <div className="mr-3 font-medium cursor-pointer hover:underline">
+                              Thích
+                            </div>
+                            <div className="font-light">
+                              {moment(item?.time_create).fromNow()}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
                 {FormRecomment && selectedCommentId === item?.id && (
                   <form className="mb-6" onSubmit={Reformik.handleSubmit}>
                     <label htmlFor="recomment" className="sr-only">

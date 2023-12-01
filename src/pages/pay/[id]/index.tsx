@@ -154,7 +154,12 @@ const pay = () => {
         date_booking: format(selected as Date, "yyyy-MM-dd"),
         mode_of_payment: selectedPaymentMethod,
         payment_status: true,
+        language: "vn",
+        bank_code: "NCB",
       });
+      if (selectedPaymentMethod === "BANKING") {
+        router.push(data.data);
+      }
       setInvoice(true);
       toast.success("Xuất hóa đơn thanh toán thành công!!");
     } catch (error: any) {

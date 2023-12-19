@@ -101,14 +101,8 @@ const index = () => {
               type="submit"
               className="w-full text-white my-2 font-semibold bg-[#060606] rounded-md p-4 text-center flex items-center justify-center"
             >
-              Đăng ký
+              Xác thực
             </button>
-            <Link
-              href="/auth/login"
-              className="w-full text-[#060606] my-2 font-semibold bg-white border-2 border-black rounded-md p-4 text-center flex items-center justify-center"
-            >
-              Đăng nhập
-            </Link>
           </div>
         </div>
 

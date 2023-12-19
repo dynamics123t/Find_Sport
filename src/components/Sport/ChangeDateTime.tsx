@@ -110,7 +110,7 @@ const ChangeDatetime = ({ id, id_sport }: CProps) => {
     try {
       const data: any = await putRequest(`/booking/${id}`, {
         id_sport: id_sport,
-        time_booking: selectedButtons,
+        time_booking: selectedButtons[0],
         date_booking: format(selected as Date, "yyyy-MM-dd"),
       });
       router.reload();
